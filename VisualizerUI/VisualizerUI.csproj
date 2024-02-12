@@ -8,4 +8,12 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Assets\NV_darkgray_near_black_background_24x24.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\NV_darkgray_near_black_background_24x24.png" />
+  </ItemGroup>
+
 </Project>
