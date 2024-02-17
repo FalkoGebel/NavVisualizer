@@ -13,6 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\VisualizerLibrary\VisualizerLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Assets\NV_darkgray_near_black_background_24x24.png" />
   </ItemGroup>
 
