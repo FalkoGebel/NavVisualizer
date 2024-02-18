@@ -1,6 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
-using System.Windows;
+﻿using System.Windows;
 using VisualizerLibrary;
+using VisualizerLibrary.Models;
 
 namespace VisualizerUI
 {
@@ -9,28 +9,37 @@ namespace VisualizerUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        private VisualizerConnection? Connection;
+        
         public MainWindow()
         {
             InitializeComponent();
             Style = (Style)FindResource(typeof(Window));
         }
 
-        private void ConnectButton_Click(object sender, RoutedEventArgs e)
+        private void UpdateConnection()
         {
-            SqlConnection cnn;
+            Connection = new(ServerTextBox.Text, DatabaseTextBox.Text, CompanyTextBox.Text);
+        }
+        
+        private void UpdateCostAmountChartButton_Click(object sender, RoutedEventArgs e)
+        {
+            CostAmountDvcChartAcutalSeries.ItemsSource = null;
+
+            List<ValueEntryModel> values = [];
+
+            UpdateConnection();
             
             try
             {
-                cnn = VisualizerLogic.GetOpenConnectionToNavDatabase(ServerTextBox.Text, DatabaseTextBox.Text);
+                values = Connection.GetValueEntriesCalcSumsPerExistingDate();
+                CostAmountDvcChartAcutalSeries.ItemsSource = values;
             }
             catch (Exception exp)
             {
-                MessageBox.Show("Connection error: " + exp.Message);
+                MessageBox.Show(exp.Message);
                 return;
             }
-
-            MessageBox.Show("Connection was established");
-            cnn.Close();
         }
     }
 }

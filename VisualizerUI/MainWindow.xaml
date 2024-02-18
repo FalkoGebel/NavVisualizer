@@ -4,13 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:p="clr-namespace:VisualizerUI.Properties"
+        xmlns:dvc="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=DotNetProjects.DataVisualization.Toolkit"
         xmlns:local="clr-namespace:VisualizerUI"
         mc:Ignorable="d"
-        Title="{x:Static p:Resources.MAIN_WINDOW_TITLE}" Height="450" Width="800" Icon="/Assets/NV_darkgray_near_black_background_24x24.png" SizeToContent="WidthAndHeight" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="{x:Static p:Resources.MAIN_WINDOW_TITLE}" Height="450" Width="800" Icon="/Assets/NV_darkgray_near_black_background_24x24.png" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
             <RowDefinition/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
@@ -22,6 +25,13 @@
         <TextBox x:Name="ServerTextBox" Grid.Row="0" Grid.Column="1" Width="200" VerticalAlignment="Center" Margin="0,0,5,0"/>
         <Label Content="{x:Static p:Resources.MW_DATABASE_LABEL}" Grid.Row="1" Grid.Column="0" Margin="5,0,0,0"/>
         <TextBox x:Name="DatabaseTextBox" Grid.Row="1" Grid.Column="1" Width="200" VerticalAlignment="Center" Margin="0,0,5,0"/>
-        <Button x:Name="ConnectButton" Grid.Row="2" Grid.Column="1" Content="Connect" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="3" Click="ConnectButton_Click" Margin="0,0,5,0"/>
+        <Label Content="{x:Static p:Resources.MW_DATABASE_LABEL}" Grid.Row="2" Grid.Column="0" Margin="5,0,0,0"/>
+        <TextBox x:Name="CompanyTextBox" Grid.Row="2" Grid.Column="1" Width="200" VerticalAlignment="Center" Margin="0,0,5,0"/>
+        <Button x:Name="UpdateCostAmountChartButton" Grid.Row="3" Grid.Column="1" Content="Update Chart" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="3" Click="UpdateCostAmountChartButton_Click" Margin="0,0,5,0"/>
+        <dvc:Chart x:Name="CostAmountDvcChart" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Title="{x:Static p:Resources.CHART_COST_AMT_TITLE}" Margin="0,5,0,5">
+            <dvc:Chart.Series>
+                <dvc:LineSeries x:Name="CostAmountDvcChartAcutalSeries" Title="{x:Static p:Resources.CHART_COST_AMT_ACT_LEGEND}" IndependentValueBinding="{Binding PostingDate}" DependentValueBinding="{Binding CostAmountActual}"/>
+            </dvc:Chart.Series>
+        </dvc:Chart>
     </Grid>
 </Window>

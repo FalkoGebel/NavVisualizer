@@ -70,6 +70,15 @@ namespace VisualizerLibrary.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die End date must not be earlier than start date ähnelt.
+        /// </summary>
+        public static string EXP_END_BEFORE_START_DATE {
+            get {
+                return ResourceManager.GetString("EXP_END_BEFORE_START_DATE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No server specified ähnelt.
         /// </summary>
         public static string EXP_SERVER_MISSING {
