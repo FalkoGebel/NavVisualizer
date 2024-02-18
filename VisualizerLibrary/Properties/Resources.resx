@@ -120,6 +120,9 @@
   <data name="EXP_DATABASE_MISSING" xml:space="preserve">
     <value>No database specified</value>
   </data>
+  <data name="EXP_END_BEFORE_START_DATE" xml:space="preserve">
+    <value>End date must not be earlier than start date</value>
+  </data>
   <data name="EXP_SERVER_MISSING" xml:space="preserve">
     <value>No server specified</value>
   </data>

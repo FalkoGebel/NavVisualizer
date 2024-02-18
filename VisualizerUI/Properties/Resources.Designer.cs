@@ -61,11 +61,38 @@ namespace VisualizerUI.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Actual ähnelt.
+        /// </summary>
+        public static string CHART_COST_AMT_ACT_LEGEND {
+            get {
+                return ResourceManager.GetString("CHART_COST_AMT_ACT_LEGEND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Cost Amount ähnelt.
+        /// </summary>
+        public static string CHART_COST_AMT_TITLE {
+            get {
+                return ResourceManager.GetString("CHART_COST_AMT_TITLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die NAV Visualizer ähnelt.
         /// </summary>
         public static string MAIN_WINDOW_TITLE {
             get {
                 return ResourceManager.GetString("MAIN_WINDOW_TITLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Company: ähnelt.
+        /// </summary>
+        public static string MW_COMPANY_LABEL {
+            get {
+                return ResourceManager.GetString("MW_COMPANY_LABEL", resourceCulture);
             }
         }
         

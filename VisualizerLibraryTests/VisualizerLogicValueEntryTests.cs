@@ -1,10 +1,4 @@
 ﻿using FluentAssertions;
-using Microsoft.Data.SqlClient;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VisualizerLibrary;
 using VisualizerLibrary.Models;
 
@@ -16,6 +10,7 @@ namespace VisualizerLibraryTests
         private static string ServerFromFile = "";
         private static string DatabaseFromFile = "";
         private static string CompanyFromFile = "";
+        private static VisualizerConnection Sut;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -25,6 +20,8 @@ namespace VisualizerLibraryTests
             ServerFromFile = connectionFileData[0];
             DatabaseFromFile = connectionFileData[1];
             CompanyFromFile = connectionFileData[2];
+
+            Sut = new(ServerFromFile, DatabaseFromFile, CompanyFromFile);
         }
 
         [TestMethod]
@@ -35,5 +32,31 @@ namespace VisualizerLibraryTests
             ValueEntries.Count.Should().Be(expectedNumber);
         }
 
+        [TestMethod]
+        public void GetAllValueEntriesViualizerConnectionAndNumberIsCorrect()
+        {
+            int expectedNumber = 389;
+            List<ValueEntryModel> ValueEntries = Sut.GetValueEntries();
+            ValueEntries.Count.Should().Be(expectedNumber);
+        }
+
+        [TestMethod]
+        public void GetValueEntriesFirstQuarter2019ViualizerConnectionAndNumberIsCorrect()
+        {
+            int expectedNumber = 17;
+            DateTime start = new(2019, 01, 01);
+            DateTime end = new(2019, 03, 31);
+            Sut.SetDateFilter(start, end);
+            List<ValueEntryModel> ValueEntries = Sut.GetValueEntries();
+            ValueEntries.Count.Should().Be(expectedNumber);
+        }
+
+        [TestMethod]
+        public void GetAllValueEntriesViualizerConnectionAndFirstDateIsCorrect()
+        {
+            DateTime expectedFirstDate = new(2018, 06, 01);
+            List<ValueEntryModel> ValueEntries = Sut.GetValueEntries();
+            ValueEntries[0].PostingDate.Should().Be(expectedFirstDate);
+        }
     }
 }
