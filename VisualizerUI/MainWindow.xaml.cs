@@ -15,6 +15,9 @@ namespace VisualizerUI
         {
             InitializeComponent();
             Style = (Style)FindResource(typeof(Window));
+            System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
         }
 
         private void UpdateConnection()
@@ -24,21 +27,22 @@ namespace VisualizerUI
         
         private void UpdateCostAmountChartButton_Click(object sender, RoutedEventArgs e)
         {
-            CostAmountDvcChartAcutalSeries.ItemsSource = null;
-
-            List<ValueEntryModel> values = [];
+            CostAmountActualDvcChartSeries.ItemsSource = null;
+            CostAmountExpectedDvcChartSeries.ItemsSource = null;
+            CostAmountTotalDvcChartSeries.ItemsSource = null;
 
             UpdateConnection();
             
             try
             {
-                values = Connection.GetValueEntriesCalcSumsPerExistingDate();
-                CostAmountDvcChartAcutalSeries.ItemsSource = values;
+                Connection.SetDateFilter(StartDatePicker.SelectedDate, EndDatePicker.SelectedDate);
+                CostAmountActualDvcChartSeries.ItemsSource = Connection.GetValueEntriesCalcSumsPerExistingDate();
+                CostAmountExpectedDvcChartSeries.ItemsSource = CostAmountActualDvcChartSeries.ItemsSource;
+                CostAmountTotalDvcChartSeries.ItemsSource = CostAmountActualDvcChartSeries.ItemsSource;
             }
             catch (Exception exp)
             {
                 MessageBox.Show(exp.Message);
-                return;
             }
         }
     }

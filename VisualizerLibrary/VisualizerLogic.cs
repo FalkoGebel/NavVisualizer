@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
+using System.Data;
 using VisualizerLibrary.Models;
 
 namespace VisualizerLibrary
@@ -22,26 +23,14 @@ namespace VisualizerLibrary
             return cnn;
         }
 
-        public static List<ValueEntryModel> GetValueEntries(string serverFromFile, string databaseFromFile, string companyFromFile, string DateFilter = "")
+        public static List<ValueEntryModel> GetValueEntries(string serverFromFile, string databaseFromFile, string companyFromFile, DateTime? endDate = null)
         {
             List<ValueEntryModel> output;
-            string query = $"SELECT [Entry No_] AS EntryNo, [Posting Date] As PostingDate, [Cost Amount (Actual)] As CostAmountActual FROM [{companyFromFile}$Value Entry]";
+            string query = $"SELECT [Entry No_] AS EntryNo, [Posting Date] AS PostingDate, [Cost Amount (Actual)] AS CostAmountActual," +
+                $" [Cost Amount (Expected)] AS CostAmountExpected FROM [{companyFromFile}$Value Entry]";
 
-            if (DateFilter != string.Empty)
-            {
-                string[] dates = DateFilter.Split("..");
-
-                query += " WHERE ";
-                
-                if (dates[0] !=  string.Empty)
-                    query += $"[Posting Date] >= '{dates[0]}'";
-
-                if (dates[0] != string.Empty && dates[1] != string.Empty)
-                    query += " AND ";
-                
-                if (dates[1] != string.Empty)
-                    query += $"[Posting Date] < '{DateTime.Parse(dates[1]).AddDays(1):yyyy-MM-dd}'";
-            }
+            if (endDate != null)
+                query += $" WHERE [Posting Date] <= '{((DateTime)endDate):yyyy-dd-MM}'";
 
             using (SqlConnection cnn = GetOpenConnectionToNavDatabase(serverFromFile, databaseFromFile))
             {

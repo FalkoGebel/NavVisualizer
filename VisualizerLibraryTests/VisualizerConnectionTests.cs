@@ -26,36 +26,39 @@ namespace VisualizerLibraryTests
         [TestMethod]
         public void SetDateFilterToNothingAndEmptyDateFilter()
         {
-            DateTime start = new();
-            DateTime end = new();
+            DateTime? start = null;
+            DateTime? end = null;
 
             Sut.SetDateFilter(start, end);
 
-            Sut.DateFilter.Should().BeEmpty();
+            Sut.StartDate.Should().BeNull();
+            Sut.EndDate.Should().BeNull();
         }
 
         [TestMethod]
         public void SetDateFilterOnlyStartAndCorrectFilter()
         {
             DateTime start = new(2019, 02, 01);
-            DateTime end = new();
+            DateTime? end = null;
             string expected = "2019-02-01..";
 
             Sut.SetDateFilter(start, end);
-
-            Sut.DateFilter.Should().Be(expected);
+            
+            Sut.StartDate.Should().Be(start);
+            Sut.EndDate.Should().BeNull();
         }
 
         [TestMethod]
         public void SetDateFilterOnlyEndAndCorrectFilter()
         {
-            DateTime start = new();
+            DateTime? start = null;
             DateTime end = new(2019, 02, 01);
             string expected = "..2019-02-01";
 
             Sut.SetDateFilter(start, end);
 
-            Sut.DateFilter.Should().Be(expected);
+            Sut.StartDate.Should().BeNull();
+            Sut.EndDate.Should().Be(end);
         }
 
         [TestMethod]
@@ -67,7 +70,8 @@ namespace VisualizerLibraryTests
 
             Sut.SetDateFilter(start, end);
 
-            Sut.DateFilter.Should().Be(expected);
+            Sut.StartDate.Should().Be(start);
+            Sut.EndDate.Should().Be(end);
         }
 
         [TestMethod]
@@ -79,7 +83,8 @@ namespace VisualizerLibraryTests
 
             Sut.SetDateFilter(start, end);
 
-            Sut.DateFilter.Should().Be(expected);
+            Sut.StartDate.Should().Be(start);
+            Sut.EndDate.Should().Be(end);
         }
 
         [TestMethod]

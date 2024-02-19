@@ -120,8 +120,14 @@
   <data name="CHART_COST_AMT_ACT_LEGEND" xml:space="preserve">
     <value>Actual</value>
   </data>
+  <data name="CHART_COST_AMT_EXP_LEGEND" xml:space="preserve">
+    <value>Expected</value>
+  </data>
   <data name="CHART_COST_AMT_TITLE" xml:space="preserve">
     <value>Cost Amount</value>
+  </data>
+  <data name="CHART_COST_AMT_TOT_LEGEND" xml:space="preserve">
+    <value>Total</value>
   </data>
   <data name="MAIN_WINDOW_TITLE" xml:space="preserve">
     <value>NAV Visualizer</value>
@@ -132,7 +138,13 @@
   <data name="MW_DATABASE_LABEL" xml:space="preserve">
     <value>Database:</value>
   </data>
+  <data name="MW_END_DATE_LABEL" xml:space="preserve">
+    <value>End date:</value>
+  </data>
   <data name="MW_SERVER_LABEL" xml:space="preserve">
     <value>Server:</value>
+  </data>
+  <data name="MW_START_DATE_LABEL" xml:space="preserve">
+    <value>Start date:</value>
   </data>
 </root>
