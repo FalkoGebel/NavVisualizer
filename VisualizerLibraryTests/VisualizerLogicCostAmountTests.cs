@@ -24,6 +24,12 @@ namespace VisualizerLibraryTests
             Sut = new(ServerFromFile, DatabaseFromFile, CompanyFromFile);
         }
 
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            Sut.SetDateFilter(null, null);
+        }
+        
         [TestMethod]
         public void CostAmountActualSeriesForExistingDatesWithoutDateFilterAndCorrectValues()
         {
@@ -41,6 +47,28 @@ namespace VisualizerLibraryTests
         {
             int expected = 31;
 
+            List<ValueEntryModel> valueEntries = Sut.GetValueEntriesCalcSumsPerExistingDate();
+
+            valueEntries.Count.Should().Be(expected);
+        }
+
+        [TestMethod]
+        public void CostAmountActualSeriesForExistingDatesWithDateFilterAndCorrectNumber()
+        {
+            int expected = 30;
+
+            Sut.SetDateFilter(new(2018, 07, 01), null);
+            List<ValueEntryModel> valueEntries = Sut.GetValueEntriesCalcSumsPerExistingDate();
+
+            valueEntries.Count.Should().Be(expected);
+        }
+
+        [TestMethod]
+        public void CostAmountActualSeriesForExistingDatesWithDateFilter2AndCorrectNumber()
+        {
+            int expected = 29;
+
+            Sut.SetDateFilter(new(2018, 07, 01), new(2019, 09, 07));
             List<ValueEntryModel> valueEntries = Sut.GetValueEntriesCalcSumsPerExistingDate();
 
             valueEntries.Count.Should().Be(expected);

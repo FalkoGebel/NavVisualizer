@@ -41,9 +41,20 @@ namespace VisualizerLibraryTests
         }
 
         [TestMethod]
+        public void GetValueEntriesPerEndOfFirstQuqarter2019ViualizerConnectionAndNumberIsCorrect()
+        {
+            int expectedNumber = 346;
+            DateTime? start = null;
+            DateTime end = new(2019, 03, 31);
+            Sut.SetDateFilter(start, end);
+            List<ValueEntryModel> ValueEntries = Sut.GetValueEntries();
+            ValueEntries.Count.Should().Be(expectedNumber);
+        }
+
+        [TestMethod]
         public void GetValueEntriesFirstQuarter2019ViualizerConnectionAndNumberIsCorrect()
         {
-            int expectedNumber = 17;
+            int expectedNumber = 346;
             DateTime start = new(2019, 01, 01);
             DateTime end = new(2019, 03, 31);
             Sut.SetDateFilter(start, end);

@@ -70,11 +70,29 @@ namespace VisualizerUI.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Expected ähnelt.
+        /// </summary>
+        public static string CHART_COST_AMT_EXP_LEGEND {
+            get {
+                return ResourceManager.GetString("CHART_COST_AMT_EXP_LEGEND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Cost Amount ähnelt.
         /// </summary>
         public static string CHART_COST_AMT_TITLE {
             get {
                 return ResourceManager.GetString("CHART_COST_AMT_TITLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Total ähnelt.
+        /// </summary>
+        public static string CHART_COST_AMT_TOT_LEGEND {
+            get {
+                return ResourceManager.GetString("CHART_COST_AMT_TOT_LEGEND", resourceCulture);
             }
         }
         
@@ -106,11 +124,29 @@ namespace VisualizerUI.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die End date: ähnelt.
+        /// </summary>
+        public static string MW_END_DATE_LABEL {
+            get {
+                return ResourceManager.GetString("MW_END_DATE_LABEL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Server: ähnelt.
         /// </summary>
         public static string MW_SERVER_LABEL {
             get {
                 return ResourceManager.GetString("MW_SERVER_LABEL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Start date: ähnelt.
+        /// </summary>
+        public static string MW_START_DATE_LABEL {
+            get {
+                return ResourceManager.GetString("MW_START_DATE_LABEL", resourceCulture);
             }
         }
     }
