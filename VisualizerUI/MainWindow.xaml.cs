@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using VisualizerLibrary;
-using VisualizerLibrary.Models;
 
 namespace VisualizerUI
 {
@@ -22,7 +22,7 @@ namespace VisualizerUI
 
         private void UpdateConnection()
         {
-            Connection = new(ServerTextBox.Text, DatabaseTextBox.Text, CompanyTextBox.Text);
+            Connection = new(NavServerTextBox.Text, NavDatabaseTextBox.Text, CompanyTextBox.Text, VisualizerServerTextBox.Text, VisualizerDatabaseTextBox.Text);
         }
         
         private void UpdateCostAmountChartButton_Click(object sender, RoutedEventArgs e)
@@ -44,6 +44,13 @@ namespace VisualizerUI
             {
                 MessageBox.Show(exp.Message);
             }
+        }
+
+        private void UpdateCostAmountChartButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            UpdateConnection();
+            Connection.UpdateVisualizerDatabaseFromNavDatabase();
+            MessageBox.Show("Update gelaufen");
         }
     }
 }

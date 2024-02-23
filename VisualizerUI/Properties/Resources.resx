@@ -135,16 +135,22 @@
   <data name="MW_COMPANY_LABEL" xml:space="preserve">
     <value>Company:</value>
   </data>
-  <data name="MW_DATABASE_LABEL" xml:space="preserve">
-    <value>Database:</value>
-  </data>
   <data name="MW_END_DATE_LABEL" xml:space="preserve">
     <value>End date:</value>
   </data>
-  <data name="MW_SERVER_LABEL" xml:space="preserve">
-    <value>Server:</value>
+  <data name="MW_NAV_DATABASE_LABEL" xml:space="preserve">
+    <value>NAV Database:</value>
+  </data>
+  <data name="MW_NAV_SERVER_LABEL" xml:space="preserve">
+    <value>NAV Server:</value>
   </data>
   <data name="MW_START_DATE_LABEL" xml:space="preserve">
     <value>Start date:</value>
+  </data>
+  <data name="MW_VISUALIZER_DATABASE_LABEL" xml:space="preserve">
+    <value>Visualizer Database:</value>
+  </data>
+  <data name="MW_VISUALIZER_SERVER_LABEL" xml:space="preserve">
+    <value>Visualizer Server:</value>
   </data>
 </root>

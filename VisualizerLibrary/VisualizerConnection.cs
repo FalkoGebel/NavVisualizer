@@ -2,19 +2,70 @@
 
 namespace VisualizerLibrary
 {
-    public class VisualizerConnection(string server, string database, string company)
+    public class VisualizerConnection(string navServer, string navDatabase, string company, string visualizerServer, string visualizerDatabase)
     {
-        public string Server { get; set; } = server;
-        public string Database { get; set; } = database;
+        public string NavServer { get; set; } = navServer;
+        public string NavDatabase { get; set; } = navDatabase;
         public string Company { get; set; } = company;
+        public string VisualizerServer { get; set; } = visualizerServer;
+        public string VisualizerDatabase { get; set; } = visualizerDatabase;
         public DateTime? StartDate { get; private set; }
         public DateTime? EndDate { get; private set; }
 
-        public List<ValueEntryModel> GetValueEntries()
+        public void UpdateVisualizerDatabaseFromNavDatabase()
         {
-            return VisualizerLogic.GetValueEntries(Server, Database, Company, EndDate);
+            // Drop Tables
+            VisualizerDatabaseLogic.DropVisualizerDatabaseTables(VisualizerServer, VisualizerDatabase);
+
+            // Create Tables
+            VisualizerDatabaseLogic.CreateVisualizerDatabaseTables(VisualizerServer, VisualizerDatabase);
+            
+            // Fill "Values Per Date" Table
+            List<ValueEntryModel> valueEntries = NavDatabaseLogic.GetValueEntries(NavServer, NavDatabase, Company);
+            if (valueEntries.Count > 0 )
+            {
+                List<DateTime> dates = [.. valueEntries.Select(ve => ve.PostingDate).Distinct().OrderBy(d => d)];
+                DateTime currentDate = dates[0];
+                DateTime endDate = dates[^1];
+                List<ValuesPerDateModel> valuesPerDates = [];
+                ValuesPerDateModel lastModel = new();
+                while (currentDate <= endDate)
+                {
+                    bool endOfMonth = currentDate.Day == DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
+
+                    ValuesPerDateModel vpdm = new()
+                    {
+                        Date = currentDate,
+                        EndOfWeek = ((int)currentDate.DayOfWeek) == 0,
+                        EndOfMonth = endOfMonth,
+                        EndOfQuarter = endOfMonth && currentDate.Month % 3 == 0,
+                        EndOfYear = endOfMonth && currentDate.Month == 12
+                    };
+
+                    if (dates.Contains(currentDate))
+                    {
+                        vpdm.CostAmountActual = valueEntries.Where(ve => ve.PostingDate <= currentDate).Sum(ve => ve.CostAmountActual);
+                    }
+                    else
+                    {
+                        vpdm.CostAmountActual = lastModel.CostAmountActual;
+                    }
+
+                    valuesPerDates.Add(vpdm);
+                    lastModel = vpdm;
+                    currentDate = currentDate.AddDays(1);
+                }
+                VisualizerDatabaseLogic.FillValuesPerDateTable(VisualizerServer, VisualizerDatabase, valuesPerDates);
+            }
         }
 
+        [Obsolete("Maybe not longer needed - check")]
+        public List<ValueEntryModel> GetValueEntries()
+        {
+            return NavDatabaseLogic.GetValueEntries(NavServer, NavDatabase, Company);
+        }
+
+        [Obsolete("Maybe not longer needed - check")]
         public List<ValueEntryModel> GetValueEntriesCalcSumsPerExistingDate()
         {
             List<ValueEntryModel> valueEntries = GetValueEntries();

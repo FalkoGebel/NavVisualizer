@@ -7,9 +7,11 @@ namespace VisualizerLibraryTests
     [TestClass]
     public class VisualizerLogicValueEntryTests
     {
-        private static string ServerFromFile = "";
-        private static string DatabaseFromFile = "";
+        private static string NavServerFromFile = "";
+        private static string NavDatabaseFromFile = "";
         private static string CompanyFromFile = "";
+        private static string VisualizerServerFromFile = "";
+        private static string VisualizerDatabaseFromFile = "";
         private static VisualizerConnection Sut;
 
         [ClassInitialize]
@@ -17,18 +19,21 @@ namespace VisualizerLibraryTests
         {
             string[] connectionFileData = File.ReadAllLines(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/NavVisualizerTestConnectionData.txt");
 
-            ServerFromFile = connectionFileData[0];
-            DatabaseFromFile = connectionFileData[1];
+            NavServerFromFile = connectionFileData[0];
+            NavDatabaseFromFile = connectionFileData[1];
             CompanyFromFile = connectionFileData[2];
+            VisualizerServerFromFile = connectionFileData[3];
+            VisualizerDatabaseFromFile = connectionFileData[4];
 
-            Sut = new(ServerFromFile, DatabaseFromFile, CompanyFromFile);
+
+            Sut = new(NavServerFromFile, NavDatabaseFromFile, CompanyFromFile, VisualizerServerFromFile, VisualizerDatabaseFromFile);
         }
 
         [TestMethod]
         public void GetAllValueEntriesAndNumberIsCorrect()
         {
             int expectedNumber = 389;
-            List<ValueEntryModel> ValueEntries = VisualizerLogic.GetValueEntries(ServerFromFile, DatabaseFromFile, CompanyFromFile);
+            List<ValueEntryModel> ValueEntries = NavDatabaseLogic.GetValueEntries(NavServerFromFile, NavDatabaseFromFile, CompanyFromFile);
             ValueEntries.Count.Should().Be(expectedNumber);
         }
 
