@@ -25,7 +25,7 @@ namespace VisualizerLibraryTests
             string server = "";
             string database = "";
 
-            Action act = () => VisualizerLogic.GetOpenConnectionToNavDatabase(server, database);
+            Action act = () => NavDatabaseLogic.GetOpenConnectionToNavDatabase(server, database);
 
             act.Should().Throw<ArgumentException>().WithMessage("No server specified");
         }
@@ -36,7 +36,7 @@ namespace VisualizerLibraryTests
             string server = "server";
             string database = "";
 
-            Action act = () => VisualizerLogic.GetOpenConnectionToNavDatabase(server, database);
+            Action act = () => NavDatabaseLogic.GetOpenConnectionToNavDatabase(server, database);
 
             act.Should().Throw<ArgumentException>().WithMessage("No database specified");
         }
@@ -47,7 +47,7 @@ namespace VisualizerLibraryTests
             string server = "server";
             string database = "database";
 
-            Action act = () => VisualizerLogic.GetOpenConnectionToNavDatabase(server, database);
+            Action act = () => NavDatabaseLogic.GetOpenConnectionToNavDatabase(server, database);
 
             act.Should().Throw<SqlException>().WithMessage("*The server was not found or was not accessible*");
         }
@@ -55,7 +55,7 @@ namespace VisualizerLibraryTests
         [TestMethod]
         public void ConnectToDatabaseWithValidDataFromDesktopFileAndConnectionNotNullAndOpen()
         {
-            SqlConnection cnn = VisualizerLogic.GetOpenConnectionToNavDatabase(ServerFromFile, DatabaseFromFile);
+            SqlConnection cnn = NavDatabaseLogic.GetOpenConnectionToNavDatabase(ServerFromFile, DatabaseFromFile);
             cnn.Should().NotBeNull();
             cnn.State.Should().Be(System.Data.ConnectionState.Open);
             cnn.Close();

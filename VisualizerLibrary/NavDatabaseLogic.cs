@@ -4,7 +4,7 @@ using VisualizerLibrary.Models;
 
 namespace VisualizerLibrary
 {
-    public static class VisualizerLogic
+    public static class NavDatabaseLogic
     {
         public static SqlConnection GetOpenConnectionToNavDatabase(string server, string database)
         {

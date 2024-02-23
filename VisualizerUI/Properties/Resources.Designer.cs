@@ -115,15 +115,6 @@ namespace VisualizerUI.Properties {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Database: ähnelt.
-        /// </summary>
-        public static string MW_DATABASE_LABEL {
-            get {
-                return ResourceManager.GetString("MW_DATABASE_LABEL", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die End date: ähnelt.
         /// </summary>
         public static string MW_END_DATE_LABEL {
@@ -133,11 +124,20 @@ namespace VisualizerUI.Properties {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Server: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die NAV Database: ähnelt.
         /// </summary>
-        public static string MW_SERVER_LABEL {
+        public static string MW_NAV_DATABASE_LABEL {
             get {
-                return ResourceManager.GetString("MW_SERVER_LABEL", resourceCulture);
+                return ResourceManager.GetString("MW_NAV_DATABASE_LABEL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die NAV Server: ähnelt.
+        /// </summary>
+        public static string MW_NAV_SERVER_LABEL {
+            get {
+                return ResourceManager.GetString("MW_NAV_SERVER_LABEL", resourceCulture);
             }
         }
         
@@ -147,6 +147,24 @@ namespace VisualizerUI.Properties {
         public static string MW_START_DATE_LABEL {
             get {
                 return ResourceManager.GetString("MW_START_DATE_LABEL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Visualizer Database: ähnelt.
+        /// </summary>
+        public static string MW_VISUALIZER_DATABASE_LABEL {
+            get {
+                return ResourceManager.GetString("MW_VISUALIZER_DATABASE_LABEL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Visualizer Server: ähnelt.
+        /// </summary>
+        public static string MW_VISUALIZER_SERVER_LABEL {
+            get {
+                return ResourceManager.GetString("MW_VISUALIZER_SERVER_LABEL", resourceCulture);
             }
         }
     }

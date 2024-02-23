@@ -22,19 +22,26 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="5,0,5,0">
-            <Label Content="{x:Static p:Resources.MW_SERVER_LABEL}" VerticalAlignment="Center"/>
-            <TextBox x:Name="ServerTextBox" Width="200" VerticalAlignment="Center" Margin="5,0,0,0"/>
-            <Label Content="{x:Static p:Resources.MW_DATABASE_LABEL}" VerticalAlignment="Center" Margin="5,0,0,0"/>
-            <TextBox x:Name="DatabaseTextBox" Width="200" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <Label Content="{x:Static p:Resources.MW_NAV_SERVER_LABEL}" VerticalAlignment="Center"/>
+            <TextBox x:Name="NavServerTextBox" Width="200" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <Label Content="{x:Static p:Resources.MW_NAV_DATABASE_LABEL}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <TextBox x:Name="NavDatabaseTextBox" Width="200" VerticalAlignment="Center" Margin="5,0,0,0"/>
             <Label Content="{x:Static p:Resources.MW_COMPANY_LABEL}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             <TextBox x:Name="CompanyTextBox" Width="200" VerticalAlignment="Center" Margin="5,0,0,0"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="5,0,5,0">
+            <Label Content="{x:Static p:Resources.MW_VISUALIZER_SERVER_LABEL}" VerticalAlignment="Center"/>
+            <TextBox x:Name="VisualizerServerTextBox" Width="200" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <Label Content="{x:Static p:Resources.MW_VISUALIZER_DATABASE_LABEL}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <TextBox x:Name="VisualizerDatabaseTextBox" Width="200" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <Button x:Name="UpdateCostAmountChartButton" Content="Update Visualizer Database" VerticalAlignment="Center" Padding="3" Margin="5,0,5,0" Click="UpdateCostAmountChartButton_Click_1"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="5,0,5,0">
             <Label Content="{x:Static p:Resources.MW_START_DATE_LABEL}" VerticalAlignment="Center"/>
             <DatePicker x:Name="StartDatePicker" VerticalAlignment="Center" Margin="5,0,0,0"/>
             <Label Content="{x:Static p:Resources.MW_END_DATE_LABEL}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             <DatePicker x:Name="EndDatePicker" VerticalAlignment="Center" Margin="5,0,0,0"/>
-            <Button x:Name="UpdateCostAmountChartButton" Content="Update Chart" VerticalAlignment="Center" Padding="3" Click="UpdateCostAmountChartButton_Click" Margin="5,0,0,0"/>
+            <Button x:Name="UpdateVisualizerDatabaseButton" Content="Update Chart" VerticalAlignment="Center" Padding="3" Click="UpdateCostAmountChartButton_Click" Margin="5,0,0,0"/>
         </StackPanel>
         <dvc:Chart x:Name="CostAmountDvcChart" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Title="{x:Static p:Resources.CHART_COST_AMT_TITLE}" Margin="0,5,0,5">
             <dvc:Chart.Series>
