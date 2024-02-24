@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Windows;
 using VisualizerLibrary;
+using VisualizerLibrary.Models;
 
 namespace VisualizerUI
 {
@@ -9,36 +10,55 @@ namespace VisualizerUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private VisualizerConnection? Connection;
-        
+        private VisualizerConnection Connection = new("", "", "", "", "");
+
         public MainWindow()
         {
             InitializeComponent();
             Style = (Style)FindResource(typeof(Window));
-            System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("en-US");
+            System.Globalization.CultureInfo culture = new("en-US");
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
+
+            // TODO - for testing purposes only ... start
+            string[] connectionFileData = File.ReadAllLines(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/NavVisualizerTestConnectionData.txt");
+
+            NavServerTextBox.Text = connectionFileData[0];
+            NavDatabaseTextBox.Text = connectionFileData[1];
+            CompanyTextBox.Text = connectionFileData[2];
+            VisualizerServerTextBox.Text = connectionFileData[3];
+            VisualizerDatabaseTextBox.Text = connectionFileData[4];
+            // for testing purposes only ... end
+
         }
 
         private void UpdateConnection()
         {
             Connection = new(NavServerTextBox.Text, NavDatabaseTextBox.Text, CompanyTextBox.Text, VisualizerServerTextBox.Text, VisualizerDatabaseTextBox.Text);
         }
-        
+
         private void UpdateCostAmountChartButton_Click(object sender, RoutedEventArgs e)
         {
             CostAmountActualDvcChartSeries.ItemsSource = null;
             CostAmountExpectedDvcChartSeries.ItemsSource = null;
-            CostAmountTotalDvcChartSeries.ItemsSource = null;
 
             UpdateConnection();
-            
+
             try
             {
                 Connection.SetDateFilter(StartDatePicker.SelectedDate, EndDatePicker.SelectedDate);
-                CostAmountActualDvcChartSeries.ItemsSource = Connection.GetValueEntriesCalcSumsPerExistingDate();
-                CostAmountExpectedDvcChartSeries.ItemsSource = CostAmountActualDvcChartSeries.ItemsSource;
-                CostAmountTotalDvcChartSeries.ItemsSource = CostAmountActualDvcChartSeries.ItemsSource;
+                List<ValuesPerDateModel> values = Connection.GetValuesPerDateForDates();
+                List<KeyValuePair<DateTime, decimal>> keyValuePairsCostAmountActual = [];
+                List<KeyValuePair<DateTime, decimal>> keyValuePairsCostAmountExpected = [];
+
+                foreach (var value in values)
+                {
+                    keyValuePairsCostAmountActual.Add(new KeyValuePair<DateTime, decimal>(value.Date, value.CostAmountActual));
+                    keyValuePairsCostAmountExpected.Add(new KeyValuePair<DateTime, decimal>(value.Date, value.CostAmountExpected));
+                }
+
+                CostAmountActualDvcChartSeries.ItemsSource = keyValuePairsCostAmountActual;
+                CostAmountExpectedDvcChartSeries.ItemsSource = keyValuePairsCostAmountExpected;
             }
             catch (Exception exp)
             {

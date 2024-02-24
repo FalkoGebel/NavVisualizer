@@ -22,18 +22,15 @@ namespace VisualizerLibrary
             return cnn;
         }
 
-        public static List<ValueEntryModel> GetValueEntries(string serverFromFile, string databaseFromFile, string companyFromFile, DateTime? endDate = null)
+        public static List<ValueEntryModel> GetValueEntries(string serverFromFile, string databaseFromFile, string companyFromFile)
         {
             List<ValueEntryModel> output;
             string query = $"SELECT [Entry No_] AS EntryNo, [Posting Date] AS PostingDate, [Cost Amount (Actual)] AS CostAmountActual," +
-                $" [Cost Amount (Expected)] AS CostAmountExpected FROM [{companyFromFile}$Value Entry]";
-
-            if (endDate != null)
-                query += $" WHERE [Posting Date] <= '{((DateTime)endDate):yyyy-dd-MM}'";
+                $" [Cost Amount (Expected)] AS CostAmountExpected FROM [{companyFromFile}$Value Entry];";
 
             using (SqlConnection cnn = GetOpenConnectionToNavDatabase(serverFromFile, databaseFromFile))
             {
-                output = cnn.Query<ValueEntryModel>(query + ";").AsList();
+                output = cnn.Query<ValueEntryModel>(query).AsList();
             }
 
             return output;

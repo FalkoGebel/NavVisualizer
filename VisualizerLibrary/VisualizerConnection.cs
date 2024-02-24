@@ -1,16 +1,36 @@
-﻿using VisualizerLibrary.Models;
+﻿using System.Collections.Generic;
+using VisualizerLibrary.Models;
 
 namespace VisualizerLibrary
 {
-    public class VisualizerConnection(string navServer, string navDatabase, string company, string visualizerServer, string visualizerDatabase)
+    public class VisualizerConnection
     {
-        public string NavServer { get; set; } = navServer;
-        public string NavDatabase { get; set; } = navDatabase;
-        public string Company { get; set; } = company;
-        public string VisualizerServer { get; set; } = visualizerServer;
-        public string VisualizerDatabase { get; set; } = visualizerDatabase;
+        public string NavServer { get; set; }
+        public string NavDatabase { get; set; }
+        public string Company { get; set; }
+        public string VisualizerServer { get; set; }
+        public string VisualizerDatabase { get; set; }
         public DateTime? StartDate { get; private set; }
         public DateTime? EndDate { get; private set; }
+
+        public VisualizerConnection()
+        {
+            NavServer = "";
+            NavDatabase = "";
+            Company = "";
+            VisualizerServer = "";
+            VisualizerDatabase = "";
+        }
+
+        public VisualizerConnection(string navServer, string navDatabase, string company, string visualizerServer, string visualizerDatabase)
+        {
+            NavServer = navServer;
+            NavDatabase = navDatabase;
+            Company = company;
+            VisualizerServer = visualizerServer;
+            VisualizerDatabase = visualizerDatabase;
+        }
+
 
         public void UpdateVisualizerDatabaseFromNavDatabase()
         {
@@ -45,10 +65,12 @@ namespace VisualizerLibrary
                     if (dates.Contains(currentDate))
                     {
                         vpdm.CostAmountActual = valueEntries.Where(ve => ve.PostingDate <= currentDate).Sum(ve => ve.CostAmountActual);
+                        vpdm.CostAmountExpected = valueEntries.Where(ve => ve.PostingDate <= currentDate).Sum(ve => ve.CostAmountExpected);
                     }
                     else
                     {
                         vpdm.CostAmountActual = lastModel.CostAmountActual;
+                        vpdm.CostAmountExpected = lastModel.CostAmountExpected;
                     }
 
                     valuesPerDates.Add(vpdm);
@@ -57,37 +79,6 @@ namespace VisualizerLibrary
                 }
                 VisualizerDatabaseLogic.FillValuesPerDateTable(VisualizerServer, VisualizerDatabase, valuesPerDates);
             }
-        }
-
-        [Obsolete("Maybe not longer needed - check")]
-        public List<ValueEntryModel> GetValueEntries()
-        {
-            return NavDatabaseLogic.GetValueEntries(NavServer, NavDatabase, Company);
-        }
-
-        [Obsolete("Maybe not longer needed - check")]
-        public List<ValueEntryModel> GetValueEntriesCalcSumsPerExistingDate()
-        {
-            List<ValueEntryModel> valueEntries = GetValueEntries();
-            List<DateTime> dates = [.. valueEntries.Select(ve => ve.PostingDate).Distinct().OrderBy(d => d)];
-
-            if (StartDate != null)
-                dates = [..dates.Where(d => d >= StartDate)];
-
-            List<ValueEntryModel> output = [];
-
-            foreach(DateTime d in dates)
-            {
-                ValueEntryModel ve = new()
-                {
-                    PostingDate = d,
-                    CostAmountActual = valueEntries.Where(entry => entry.PostingDate <= d).Select(entry => entry.CostAmountActual).Sum(),
-                    CostAmountExpected = valueEntries.Where(entry => entry.PostingDate <= d).Select(entry => entry.CostAmountExpected).Sum()
-                };
-                output.Add(ve);
-            }
-
-            return output;
         }
 
         public void SetDateFilter(DateTime? start, DateTime? end)
@@ -100,6 +91,39 @@ namespace VisualizerLibrary
 
             if (EndDate != null && EndDate < StartDate)
                 throw new ArgumentException(Properties.Resources.EXP_END_BEFORE_START_DATE);
+        }
+
+        public List<ValuesPerDateModel> GetValuesPerDateForDates()
+        {
+            List<ValuesPerDateModel> output = VisualizerDatabaseLogic.GetValuesPerDateEntries(VisualizerServer, VisualizerDatabase);
+
+            if (StartDate != null)
+                output = output.Where(e => e.Date >= StartDate).ToList();
+
+            if (EndDate != null)
+                output = output.Where(e => e.Date <= EndDate).ToList();
+
+            return output;
+        }
+
+        public List<ValuesPerDateModel> GetValuesPerDateForWeeks()
+        {
+            return GetValuesPerDateForDates().Where(e => e.EndOfWeek).ToList();
+        }
+
+        public List<ValuesPerDateModel> GetValuesPerDateForMonths()
+        {
+            return GetValuesPerDateForDates().Where(e => e.EndOfMonth).ToList();
+        }
+
+        public List<ValuesPerDateModel> GetValuesPerDateForQuarters()
+        {
+            return GetValuesPerDateForDates().Where(e => e.EndOfQuarter).ToList();
+        }
+
+        public List<ValuesPerDateModel> GetValuesPerDateForYears()
+        {
+            return GetValuesPerDateForDates().Where(e => e.EndOfYear).ToList();
         }
     }
 }

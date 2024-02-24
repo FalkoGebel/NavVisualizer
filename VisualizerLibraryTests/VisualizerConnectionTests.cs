@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using VisualizerLibrary;
+using VisualizerLibrary.Models;
 
 namespace VisualizerLibraryTests
 {
@@ -25,6 +26,7 @@ namespace VisualizerLibraryTests
             VisualizerDatabaseFromFile = connectionFileData[4];
 
             Sut = new(NavServerFromFile, NavDatabaseFromFile, CompanyFromFile, VisualizerServerFromFile, VisualizerDatabaseFromFile);
+            Sut.UpdateVisualizerDatabaseFromNavDatabase();
         }
 
         [TestMethod]
@@ -44,7 +46,6 @@ namespace VisualizerLibraryTests
         {
             DateTime start = new(2019, 02, 01);
             DateTime? end = null;
-            string expected = "2019-02-01..";
 
             Sut.SetDateFilter(start, end);
             
@@ -100,6 +101,83 @@ namespace VisualizerLibraryTests
             Action act = () => Sut.SetDateFilter(start, end);
 
             act.Should().Throw<ArgumentException>().WithMessage("End date must not be earlier than start date");
+        }
+
+        [TestMethod]
+        public void GetCorrectNumberOfEntriesFromValuesPerDataAllDates()
+        {
+            List<ValuesPerDateModel> values = Sut.GetValuesPerDateForDates();
+            values.Count.Should().Be(465);
+        }
+
+        [TestMethod]
+        public void GetValuesPerDataAllDatesAndCorrectValuesOnFirstEntry()
+        {
+            DateTime expectedDate = new(2018, 06, 01);
+            decimal expectedCostAmountActual = 97430.30M;
+            List<ValuesPerDateModel> values = Sut.GetValuesPerDateForDates();
+            values[0].Date.Should().Be(expectedDate);
+            values[0].EndOfWeek.Should().BeFalse();
+            values[0].EndOfMonth.Should().BeFalse();
+            values[0].EndOfQuarter.Should().BeFalse();
+            values[0].EndOfYear.Should().BeFalse();
+            values[0].CostAmountActual.Should().Be(expectedCostAmountActual);
+        }
+
+        [TestMethod]
+        public void GetValuesPerDataAllDatesAndCorrectValuesOn30thEntry()
+        {
+            DateTime expectedDate = new(2018, 06, 30);
+            decimal expectedCostAmountActual = 97430.30M;
+            List<ValuesPerDateModel> values = Sut.GetValuesPerDateForDates();
+            values[29].Date.Should().Be(expectedDate);
+            values[29].EndOfWeek.Should().BeFalse();
+            values[29].EndOfMonth.Should().BeTrue();
+            values[29].EndOfQuarter.Should().BeTrue();
+            values[29].EndOfYear.Should().BeFalse();
+            values[29].CostAmountActual.Should().Be(expectedCostAmountActual);
+        }
+
+        [TestMethod]
+        public void GetValuesPerDataAllDatesAndCorrectValuesOn214thEntry()
+        {
+            DateTime expectedDate = new(2018, 12, 31);
+            decimal expectedCostAmountActual = 1763089.56M;
+            List<ValuesPerDateModel> values = Sut.GetValuesPerDateForDates();
+            values[213].Date.Should().Be(expectedDate);
+            values[213].EndOfWeek.Should().BeFalse();
+            values[213].EndOfMonth.Should().BeTrue();
+            values[213].EndOfQuarter.Should().BeTrue();
+            values[213].EndOfYear.Should().BeTrue();
+            values[213].CostAmountActual.Should().Be(expectedCostAmountActual);
+        }
+
+        [TestMethod]
+        public void GetCorrectNumberOfEntriesFromValuesPerDataWeeks()
+        {
+            List<ValuesPerDateModel> values = Sut.GetValuesPerDateForWeeks();
+            values.Count.Should().Be(67);
+        }
+
+        [TestMethod]
+        public void GetCorrectNumberOfEntriesFromValuesPerDataMonths()
+        {
+            List<ValuesPerDateModel> values = Sut.GetValuesPerDateForMonths();
+            values.Count.Should().Be(15);
+        }
+
+        [TestMethod]
+        public void GetCorrectNumberOfEntriesFromValuesPerDataQuarters()
+        {
+            List<ValuesPerDateModel> values = Sut.GetValuesPerDateForQuarters();
+            values.Count.Should().Be(5);
+        }
+
+        [TestMethod]
+        public void GetCorrectNumberOfEntriesFromValuesPerDataYears()
+        {
+            List<ValuesPerDateModel> values = Sut.GetValuesPerDateForYears();
+            values.Count.Should().Be(1);
         }
     }
 }
