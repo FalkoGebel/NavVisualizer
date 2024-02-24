@@ -32,7 +32,7 @@ namespace VisualizerLibrary
                 cnn.Query("CREATE TABLE [dbo].[Database Status](\r\n\t[ID] [int] IDENTITY(1,1) NOT NULL,\r\n\t[Calculation Timestamp] [datetime] NULL\r\n) ON [PRIMARY]");
 
                 // Table "Values Per Date"
-                cnn.Query("CREATE TABLE [dbo].[Values Per Date](\r\n\t[ID] [int] IDENTITY(1,1) NOT NULL,\r\n\t[Date] [date] NOT NULL,\r\n\t[End Of Week] [bit] NOT NULL,\r\n\t[End Of Month] [bit] NOT NULL,\r\n\t[End Of Quarter] [bit] NOT NULL,\r\n\t[End Of Year] [bit] NOT NULL,\r\n\t[Cost Amount (Actual)] [decimal](38, 20) NOT NULL\r\n) ON [PRIMARY]");
+                cnn.Query("CREATE TABLE [dbo].[Values Per Date](\r\n\t[ID] [int] IDENTITY(1,1) NOT NULL,\r\n\t[Date] [date] NOT NULL,\r\n\t[End Of Week] [bit] NOT NULL,\r\n\t[End Of Month] [bit] NOT NULL,\r\n\t[End Of Quarter] [bit] NOT NULL,\r\n\t[End Of Year] [bit] NOT NULL,\r\n\t[Cost Amount (Actual)] [decimal](38, 20) NOT NULL\r\n,\r\n\t[Cost Amount (Expected)] [decimal](38, 20) NOT NULL\r\n) ON [PRIMARY]");
             }
             catch
             {
@@ -74,17 +74,35 @@ namespace VisualizerLibrary
 	                ,[End Of Month]
 	                ,[End Of Quarter]
 	                ,[End Of Year]
-                    ,[Cost Amount (Actual)])
+                    ,[Cost Amount (Actual)]
+                    ,[Cost Amount (Expected)])
                 VALUES
 	                (@Date,
 	                @EndOfWeek,
 	                @EndOfMonth,
 	                @EndOfQuarter,
 	                @EndOfYear,
-                    @CostAmountActual)";
+                    @CostAmountActual,
+                    @CostAmountExpected)";
 
             using SqlConnection cnn = GetOpenConnectionToVisualizerDatabase(visualizerServer, visualizerDatabase);
             cnn.Execute(query, param: valuesPerDates);
+        }
+
+        internal static List<ValuesPerDateModel> GetValuesPerDateEntries(string server, string database)
+        {
+            string query =
+                @$"SELECT [Date] AS Date
+                         ,[End Of Week] AS EndOfWeek
+                         ,[End Of Month] AS EndOfMonth
+                         ,[End Of Quarter] AS EndOfQuarter
+                         ,[End Of Year] AS EndOfYear
+                         ,[Cost Amount (Actual)] AS CostAmountActual
+                         ,[Cost Amount (Expected)] AS CostAmountExpected
+                FROM[dbo].[Values Per Date]";
+
+            using SqlConnection cnn = GetOpenConnectionToVisualizerDatabase(server, database);
+            return [.. cnn.Query<ValuesPerDateModel>(query).AsList().OrderBy(e => e.Date)];
         }
     }
 }

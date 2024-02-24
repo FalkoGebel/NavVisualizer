@@ -1,4 +1,4 @@
-﻿<Window x:Class="VisualizerUI.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,8 +6,13 @@
         xmlns:p="clr-namespace:VisualizerUI.Properties"
         xmlns:dvc="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=DotNetProjects.DataVisualization.Toolkit"
         xmlns:local="clr-namespace:VisualizerUI"
+        xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
+        x:Class="VisualizerUI.MainWindow"
         mc:Ignorable="d"
         Title="{x:Static p:Resources.MAIN_WINDOW_TITLE}" Height="450" Width="800" Icon="/Assets/NV_darkgray_near_black_background_24x24.png" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <toolkit:StringFormatConverter x:Key="StringFormatConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -44,11 +49,16 @@
             <Button x:Name="UpdateVisualizerDatabaseButton" Content="Update Chart" VerticalAlignment="Center" Padding="3" Click="UpdateCostAmountChartButton_Click" Margin="5,0,0,0"/>
         </StackPanel>
         <dvc:Chart x:Name="CostAmountDvcChart" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Title="{x:Static p:Resources.CHART_COST_AMT_TITLE}" Margin="0,5,0,5">
-            <dvc:Chart.Series>
-                <dvc:LineSeries x:Name="CostAmountActualDvcChartSeries" Title="{x:Static p:Resources.CHART_COST_AMT_ACT_LEGEND}" IndependentValueBinding="{Binding PostingDateAsShortString}" DependentValueBinding="{Binding CostAmountActual}"/>
-                <dvc:LineSeries x:Name="CostAmountExpectedDvcChartSeries" Title="{x:Static p:Resources.CHART_COST_AMT_EXP_LEGEND}" IndependentValueBinding="{Binding PostingDateAsShortString}" DependentValueBinding="{Binding CostAmountExpected}"/>
-                <dvc:LineSeries x:Name="CostAmountTotalDvcChartSeries" Title="{x:Static p:Resources.CHART_COST_AMT_TOT_LEGEND}" IndependentValueBinding="{Binding PostingDateAsShortString}" DependentValueBinding="{Binding CostAmountTotal}"/>
-            </dvc:Chart.Series>
+            <dvc:LineSeries x:Name="CostAmountActualDvcChartSeries" Title="{x:Static p:Resources.CHART_COST_AMT_ACT_LEGEND}" IndependentValueBinding="{Binding Key}" DependentValueBinding="{Binding Value}">
+                <dvc:LineSeries.IndependentAxis>
+                    <dvc:DateTimeAxis Orientation="X" Interval="1" IntervalType="Months" FontFamily="Consolas" FontSize="10"/>
+                </dvc:LineSeries.IndependentAxis>
+            </dvc:LineSeries>
+            <dvc:LineSeries x:Name="CostAmountExpectedDvcChartSeries" Title="{x:Static p:Resources.CHART_COST_AMT_EXP_LEGEND}" IndependentValueBinding="{Binding Key}" DependentValueBinding="{Binding Value}">
+                <dvc:LineSeries.IndependentAxis>
+                    <dvc:DateTimeAxis Orientation="X" Interval="1" IntervalType="Months" FontFamily="Consolas" FontSize="10"/>
+                </dvc:LineSeries.IndependentAxis>
+            </dvc:LineSeries>
         </dvc:Chart>
     </Grid>
 </Window>
