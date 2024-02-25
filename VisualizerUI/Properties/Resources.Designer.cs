@@ -61,6 +61,33 @@ namespace VisualizerUI.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Column ähnelt.
+        /// </summary>
+        public static string CB_CHART_TYPES_COLUMN {
+            get {
+                return ResourceManager.GetString("CB_CHART_TYPES_COLUMN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Line ähnelt.
+        /// </summary>
+        public static string CB_CHART_TYPES_LINE {
+            get {
+                return ResourceManager.GetString("CB_CHART_TYPES_LINE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Cost Amount ähnelt.
+        /// </summary>
+        public static string CB_KEY_FIGURE_COST_AMOUNT {
+            get {
+                return ResourceManager.GetString("CB_KEY_FIGURE_COST_AMOUNT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Actual ähnelt.
         /// </summary>
         public static string CHART_COST_AMT_ACT_LEGEND {
@@ -106,6 +133,15 @@ namespace VisualizerUI.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Chart Type: ähnelt.
+        /// </summary>
+        public static string MW_CHART_TYPE_LABEL {
+            get {
+                return ResourceManager.GetString("MW_CHART_TYPE_LABEL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Company: ähnelt.
         /// </summary>
         public static string MW_COMPANY_LABEL {
@@ -120,6 +156,15 @@ namespace VisualizerUI.Properties {
         public static string MW_END_DATE_LABEL {
             get {
                 return ResourceManager.GetString("MW_END_DATE_LABEL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Key Figure: ähnelt.
+        /// </summary>
+        public static string MW_KEY_FIGURE_LABEL {
+            get {
+                return ResourceManager.GetString("MW_KEY_FIGURE_LABEL", resourceCulture);
             }
         }
         
@@ -147,6 +192,15 @@ namespace VisualizerUI.Properties {
         public static string MW_START_DATE_LABEL {
             get {
                 return ResourceManager.GetString("MW_START_DATE_LABEL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Update Database ähnelt.
+        /// </summary>
+        public static string MW_UPDATE_DATABASE_BUTTON_TEXT {
+            get {
+                return ResourceManager.GetString("MW_UPDATE_DATABASE_BUTTON_TEXT", resourceCulture);
             }
         }
         

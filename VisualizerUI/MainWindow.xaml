@@ -9,14 +9,12 @@
         xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
         x:Class="VisualizerUI.MainWindow"
         mc:Ignorable="d"
-        Title="{x:Static p:Resources.MAIN_WINDOW_TITLE}" Height="450" Width="800" Icon="/Assets/NV_darkgray_near_black_background_24x24.png" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
+        Title="{x:Static p:Resources.MAIN_WINDOW_TITLE}" Icon="/Assets/NV_darkgray_near_black_background_24x24.png" WindowStartupLocation="CenterScreen" WindowState="Maximized" Loaded="Window_Loaded">
     <Window.Resources>
         <toolkit:StringFormatConverter x:Key="StringFormatConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
             <RowDefinition/>
@@ -33,32 +31,22 @@
             <TextBox x:Name="NavDatabaseTextBox" Width="200" VerticalAlignment="Center" Margin="5,0,0,0"/>
             <Label Content="{x:Static p:Resources.MW_COMPANY_LABEL}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             <TextBox x:Name="CompanyTextBox" Width="200" VerticalAlignment="Center" Margin="5,0,0,0"/>
-        </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="5,0,5,0">
-            <Label Content="{x:Static p:Resources.MW_VISUALIZER_SERVER_LABEL}" VerticalAlignment="Center"/>
+            <Label Content="{x:Static p:Resources.MW_VISUALIZER_SERVER_LABEL}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             <TextBox x:Name="VisualizerServerTextBox" Width="200" VerticalAlignment="Center" Margin="5,0,0,0"/>
             <Label Content="{x:Static p:Resources.MW_VISUALIZER_DATABASE_LABEL}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             <TextBox x:Name="VisualizerDatabaseTextBox" Width="200" VerticalAlignment="Center" Margin="5,0,0,0"/>
-            <Button x:Name="UpdateCostAmountChartButton" Content="Update Visualizer Database" VerticalAlignment="Center" Padding="3" Margin="5,0,5,0" Click="UpdateCostAmountChartButton_Click_1"/>
+            <Button x:Name="UpdateCostAmountChartButton" Content="{x:Static p:Resources.MW_UPDATE_DATABASE_BUTTON_TEXT}" VerticalAlignment="Center" Padding="3" Margin="5,0,5,0" Click="UpdateCostAmountChartButton_Click_1"/>
         </StackPanel>
-        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="5,0,5,0">
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="5,0,5,0">
             <Label Content="{x:Static p:Resources.MW_START_DATE_LABEL}" VerticalAlignment="Center"/>
-            <DatePicker x:Name="StartDatePicker" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <DatePicker x:Name="StartDatePicker" VerticalAlignment="Center" Margin="5,0,0,0" SelectedDateChanged="StartDatePicker_SelectedDateChanged"/>
             <Label Content="{x:Static p:Resources.MW_END_DATE_LABEL}" VerticalAlignment="Center" Margin="5,0,0,0"/>
-            <DatePicker x:Name="EndDatePicker" VerticalAlignment="Center" Margin="5,0,0,0"/>
-            <Button x:Name="UpdateVisualizerDatabaseButton" Content="Update Chart" VerticalAlignment="Center" Padding="3" Click="UpdateCostAmountChartButton_Click" Margin="5,0,0,0"/>
+            <DatePicker x:Name="EndDatePicker" VerticalAlignment="Center" Margin="5,0,0,0" SelectedDateChanged="EndDatePicker_SelectedDateChanged"/>
+            <Label Content="{x:Static p:Resources.MW_KEY_FIGURE_LABEL}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <ComboBox x:Name="KeyFigureComboBox" VerticalAlignment="Center" Margin="5,0,0,0" Width="200" SelectionChanged="KeyFigureComboBox_SelectionChanged" />
+            <Label Content="{x:Static p:Resources.MW_CHART_TYPE_LABEL}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <ComboBox x:Name="ChartTypeComboBox" VerticalAlignment="Center" Margin="5,0,0,0" Width="100" SelectionChanged="ChartTypeComboBox_SelectionChanged" />
         </StackPanel>
-        <dvc:Chart x:Name="CostAmountDvcChart" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Title="{x:Static p:Resources.CHART_COST_AMT_TITLE}" Margin="0,5,0,5">
-            <dvc:LineSeries x:Name="CostAmountActualDvcChartSeries" Title="{x:Static p:Resources.CHART_COST_AMT_ACT_LEGEND}" IndependentValueBinding="{Binding Key}" DependentValueBinding="{Binding Value}">
-                <dvc:LineSeries.IndependentAxis>
-                    <dvc:DateTimeAxis Orientation="X" Interval="1" IntervalType="Months" FontFamily="Consolas" FontSize="10"/>
-                </dvc:LineSeries.IndependentAxis>
-            </dvc:LineSeries>
-            <dvc:LineSeries x:Name="CostAmountExpectedDvcChartSeries" Title="{x:Static p:Resources.CHART_COST_AMT_EXP_LEGEND}" IndependentValueBinding="{Binding Key}" DependentValueBinding="{Binding Value}">
-                <dvc:LineSeries.IndependentAxis>
-                    <dvc:DateTimeAxis Orientation="X" Interval="1" IntervalType="Months" FontFamily="Consolas" FontSize="10"/>
-                </dvc:LineSeries.IndependentAxis>
-            </dvc:LineSeries>
-        </dvc:Chart>
+        <dvc:Chart x:Name="CostAmountDvcChart" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,5,0,5"/>
     </Grid>
 </Window>

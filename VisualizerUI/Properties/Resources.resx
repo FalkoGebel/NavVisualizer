@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CB_CHART_TYPES_COLUMN" xml:space="preserve">
+    <value>Column</value>
+  </data>
+  <data name="CB_CHART_TYPES_LINE" xml:space="preserve">
+    <value>Line</value>
+  </data>
+  <data name="CB_KEY_FIGURE_COST_AMOUNT" xml:space="preserve">
+    <value>Cost Amount</value>
+  </data>
   <data name="CHART_COST_AMT_ACT_LEGEND" xml:space="preserve">
     <value>Actual</value>
   </data>
@@ -132,11 +141,17 @@
   <data name="MAIN_WINDOW_TITLE" xml:space="preserve">
     <value>NAV Visualizer</value>
   </data>
+  <data name="MW_CHART_TYPE_LABEL" xml:space="preserve">
+    <value>Chart Type:</value>
+  </data>
   <data name="MW_COMPANY_LABEL" xml:space="preserve">
     <value>Company:</value>
   </data>
   <data name="MW_END_DATE_LABEL" xml:space="preserve">
     <value>End date:</value>
+  </data>
+  <data name="MW_KEY_FIGURE_LABEL" xml:space="preserve">
+    <value>Key Figure:</value>
   </data>
   <data name="MW_NAV_DATABASE_LABEL" xml:space="preserve">
     <value>NAV Database:</value>
@@ -146,6 +161,9 @@
   </data>
   <data name="MW_START_DATE_LABEL" xml:space="preserve">
     <value>Start date:</value>
+  </data>
+  <data name="MW_UPDATE_DATABASE_BUTTON_TEXT" xml:space="preserve">
+    <value>Update Database</value>
   </data>
   <data name="MW_VISUALIZER_DATABASE_LABEL" xml:space="preserve">
     <value>Visualizer Database:</value>
