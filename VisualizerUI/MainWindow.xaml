@@ -42,6 +42,8 @@
             <DatePicker x:Name="StartDatePicker" VerticalAlignment="Center" Margin="5,0,0,0" SelectedDateChanged="StartDatePicker_SelectedDateChanged"/>
             <Label Content="{x:Static p:Resources.MW_END_DATE_LABEL}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             <DatePicker x:Name="EndDatePicker" VerticalAlignment="Center" Margin="5,0,0,0" SelectedDateChanged="EndDatePicker_SelectedDateChanged"/>
+            <Label Content="{x:Static p:Resources.MW_PERIOD_TYPE_LABEL}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <ComboBox x:Name="PeriodTypeComboBox" VerticalAlignment="Center" Margin="5,0,0,0" Width="100" SelectionChanged="PeriodTypeComboBox_SelectionChanged"/>
             <Label Content="{x:Static p:Resources.MW_KEY_FIGURE_LABEL}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             <ComboBox x:Name="KeyFigureComboBox" VerticalAlignment="Center" Margin="5,0,0,0" Width="200" SelectionChanged="KeyFigureComboBox_SelectionChanged" />
             <Label Content="{x:Static p:Resources.MW_CHART_TYPE_LABEL}" VerticalAlignment="Center" Margin="5,0,0,0"/>

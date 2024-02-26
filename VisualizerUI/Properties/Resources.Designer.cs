@@ -88,6 +88,60 @@ namespace VisualizerUI.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sales Amount ähnelt.
+        /// </summary>
+        public static string CB_KEY_FIGURE_SALES_AMOUNT {
+            get {
+                return ResourceManager.GetString("CB_KEY_FIGURE_SALES_AMOUNT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Day ähnelt.
+        /// </summary>
+        public static string CB_PERIOD_TYPE_DAY {
+            get {
+                return ResourceManager.GetString("CB_PERIOD_TYPE_DAY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Month ähnelt.
+        /// </summary>
+        public static string CB_PERIOD_TYPE_MONTH {
+            get {
+                return ResourceManager.GetString("CB_PERIOD_TYPE_MONTH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Quarter ähnelt.
+        /// </summary>
+        public static string CB_PERIOD_TYPE_QUARTER {
+            get {
+                return ResourceManager.GetString("CB_PERIOD_TYPE_QUARTER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Week ähnelt.
+        /// </summary>
+        public static string CB_PERIOD_TYPE_WEEK {
+            get {
+                return ResourceManager.GetString("CB_PERIOD_TYPE_WEEK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Year ähnelt.
+        /// </summary>
+        public static string CB_PERIOD_TYPE_YEAR {
+            get {
+                return ResourceManager.GetString("CB_PERIOD_TYPE_YEAR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Actual ähnelt.
         /// </summary>
         public static string CHART_COST_AMT_ACT_LEGEND {
@@ -120,6 +174,24 @@ namespace VisualizerUI.Properties {
         public static string CHART_COST_AMT_TOT_LEGEND {
             get {
                 return ResourceManager.GetString("CHART_COST_AMT_TOT_LEGEND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Actual ähnelt.
+        /// </summary>
+        public static string CHART_SALES_AMT_ACT_LEGEND {
+            get {
+                return ResourceManager.GetString("CHART_SALES_AMT_ACT_LEGEND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sales Amount ähnelt.
+        /// </summary>
+        public static string CHART_SALES_AMT_TITLE {
+            get {
+                return ResourceManager.GetString("CHART_SALES_AMT_TITLE", resourceCulture);
             }
         }
         
@@ -183,6 +255,15 @@ namespace VisualizerUI.Properties {
         public static string MW_NAV_SERVER_LABEL {
             get {
                 return ResourceManager.GetString("MW_NAV_SERVER_LABEL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Period Type: ähnelt.
+        /// </summary>
+        public static string MW_PERIOD_TYPE_LABEL {
+            get {
+                return ResourceManager.GetString("MW_PERIOD_TYPE_LABEL", resourceCulture);
             }
         }
         

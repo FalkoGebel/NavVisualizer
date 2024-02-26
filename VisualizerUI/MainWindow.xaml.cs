@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.DataVisualization.Charting;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -14,7 +15,7 @@ namespace VisualizerUI
     public partial class MainWindow : Window
     {
         private VisualizerConnection Connection = new("", "", "", "", "");
-        private readonly bool ReadyToChart = false;
+        private bool ReadyToChart = false;
 
         public MainWindow()
         {
@@ -51,17 +52,7 @@ namespace VisualizerUI
         {
             CostAmountDvcChart.Title = Properties.Resources.CHART_COST_AMT_TITLE;
 
-            List<ValuesPerDateModel> values;
-
-            try
-            {
-                values = Connection.GetValuesPerDateForDates();
-            }
-            catch (Exception exp)
-            {
-                MessageBox.Show(exp.Message);
-                return;
-            }
+            List<ValuesPerDateModel> values = GetValuesPerDateByCurrentPeriodType();
 
             List<KeyValuePair<DateTime, decimal>> keyValuePairsCostAmountActual = [];
             List<KeyValuePair<DateTime, decimal>> keyValuePairsCostAmountExpected = [];
@@ -148,14 +139,74 @@ namespace VisualizerUI
             }
         }
 
+        private List<ValuesPerDateModel> GetValuesPerDateByCurrentPeriodType()
+        {
+            try
+            {
+                if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_DAY)
+                    return Connection.GetValuesPerDateForDates();
+                else if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_WEEK)
+                    return Connection.GetValuesPerDateForWeeks();
+                else if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_MONTH)
+                    return Connection.GetValuesPerDateForMonths();
+                else if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_QUARTER)
+                    return Connection.GetValuesPerDateForQuarters();
+                else
+                    return Connection.GetValuesPerDateForYears();
+            }
+            catch (Exception exp)
+            {
+                throw new Exception(exp.Message);
+            }
+        }
+
+        private void AddSalesAmountSeriesToChart()
+        {
+            CostAmountDvcChart.Title = Properties.Resources.CHART_SALES_AMT_TITLE;
+
+            List<ValuesPerDateModel> values = GetValuesPerDateByCurrentPeriodType();
+
+            List<KeyValuePair<DateTime, decimal>> keyValuePairsSalesAmountActual = [];
+
+            foreach (var value in values)
+                keyValuePairsSalesAmountActual.Add(new KeyValuePair<DateTime, decimal>(value.Date, value.SalesAmountActual));
+
+            Style style = new();
+            style.Setters.Add(new Setter(BackgroundProperty, Brushes.Black));
+
+            if (ChartTypeComboBox.Items.GetItemAt(ChartTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_CHART_TYPES_COLUMN)
+            {
+                style.TargetType = typeof(ColumnDataPoint);
+
+                ColumnSeries cs = new()
+                {
+                    IndependentValueBinding = new Binding("Key"),
+                    DependentValueBinding = new Binding("Value"),
+                    DataPointStyle = style,
+                    ItemsSource = keyValuePairsSalesAmountActual,
+                    Title = Properties.Resources.CHART_SALES_AMT_ACT_LEGEND
+                };
+
+                CostAmountDvcChart.Series.Add(cs);
+            }
+            else
+                MessageBox.Show("Not Implemented");
+        }
+
         private void InitializeComboBoxItems()
         {
+            PeriodTypeComboBox.Items.Add(Properties.Resources.CB_PERIOD_TYPE_DAY);
+            PeriodTypeComboBox.Items.Add(Properties.Resources.CB_PERIOD_TYPE_WEEK);
+            PeriodTypeComboBox.Items.Add(Properties.Resources.CB_PERIOD_TYPE_MONTH);
+            PeriodTypeComboBox.Items.Add(Properties.Resources.CB_PERIOD_TYPE_QUARTER);
+            PeriodTypeComboBox.Items.Add(Properties.Resources.CB_PERIOD_TYPE_YEAR);
+            PeriodTypeComboBox.SelectedIndex = 0;
+
             KeyFigureComboBox.Items.Add(Properties.Resources.CB_KEY_FIGURE_COST_AMOUNT);
+            KeyFigureComboBox.Items.Add(Properties.Resources.CB_KEY_FIGURE_SALES_AMOUNT);
             KeyFigureComboBox.SelectedIndex = 0;
 
-            ChartTypeComboBox.Items.Add(Properties.Resources.CB_CHART_TYPES_LINE);
-            ChartTypeComboBox.Items.Add(Properties.Resources.CB_CHART_TYPES_COLUMN);
-            ChartTypeComboBox.SelectedIndex = 0;
+            UpdateChartTypeComboBoxItems(Properties.Resources.CB_KEY_FIGURE_COST_AMOUNT);
         }
 
         private void UpdateChart()
@@ -170,13 +221,10 @@ namespace VisualizerUI
 
             if (KeyFigureComboBox.Items.GetItemAt(KeyFigureComboBox.SelectedIndex).ToString() == Properties.Resources.CB_KEY_FIGURE_COST_AMOUNT)
                 AddCostAmountSeriesToChart();
+            else if (KeyFigureComboBox.Items.GetItemAt(KeyFigureComboBox.SelectedIndex).ToString() == Properties.Resources.CB_KEY_FIGURE_SALES_AMOUNT)
+                AddSalesAmountSeriesToChart();
             else
                 MessageBox.Show("Not Implemented");
-        }
-
-        private void UpdateChartButton_Click(object sender, RoutedEventArgs e)
-        {
-            UpdateChart();
         }
 
         private void UpdateCostAmountChartButton_Click_1(object sender, RoutedEventArgs e)
@@ -187,14 +235,34 @@ namespace VisualizerUI
             UpdateChart();
         }
 
+        private void UpdateChartTypeComboBoxItems(string keyFigure)
+        {
+            ChartTypeComboBox.Items.Clear();
+            if (keyFigure == Properties.Resources.CB_KEY_FIGURE_COST_AMOUNT)
+            {
+                ChartTypeComboBox.Items.Add(Properties.Resources.CB_CHART_TYPES_LINE);
+            }
+            else if (keyFigure == Properties.Resources.CB_KEY_FIGURE_SALES_AMOUNT)
+            {
+                ChartTypeComboBox.Items.Add(Properties.Resources.CB_CHART_TYPES_COLUMN);
+            }
+            if (ChartTypeComboBox.Items.Count > 0)
+                ChartTypeComboBox.SelectedIndex = 0;
+        }
+
         private void KeyFigureComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            UpdateChart();
+            ReadyToChart = false;
+            UpdateChartTypeComboBoxItems(e.AddedItems[0].ToString());
+            ReadyToChart = true;
+            if (((ComboBox)sender).IsLoaded)
+                UpdateChart();
         }
 
         private void ChartTypeComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            UpdateChart();
+            if (((ComboBox)sender).IsLoaded)
+                UpdateChart();
         }
 
         private void StartDatePicker_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -208,6 +276,11 @@ namespace VisualizerUI
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            UpdateChart();
+        }
+
+        private void PeriodTypeComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             UpdateChart();
         }
