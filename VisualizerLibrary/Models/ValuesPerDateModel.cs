@@ -9,5 +9,6 @@
         public bool EndOfYear { get; set; }
         public decimal CostAmountActual { get; set; }
         public decimal CostAmountExpected { get; set; }
+        public decimal SalesAmountActual { get; set; }
     }
 }

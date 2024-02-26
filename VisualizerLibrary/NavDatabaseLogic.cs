@@ -25,8 +25,8 @@ namespace VisualizerLibrary
         public static List<ValueEntryModel> GetValueEntries(string serverFromFile, string databaseFromFile, string companyFromFile)
         {
             List<ValueEntryModel> output;
-            string query = $"SELECT [Entry No_] AS EntryNo, [Posting Date] AS PostingDate, [Cost Amount (Actual)] AS CostAmountActual," +
-                $" [Cost Amount (Expected)] AS CostAmountExpected FROM [{companyFromFile}$Value Entry];";
+            string query = $"SELECT [Entry No_] AS EntryNo, [Item Ledger Entry Type] AS ItemLedgerEntryType, [Posting Date] AS PostingDate, [Cost Amount (Actual)] AS CostAmountActual," +
+                $" [Cost Amount (Expected)] AS CostAmountExpected, [Sales Amount (Actual)] AS SalesAmountActual FROM [{companyFromFile}$Value Entry];";
 
             using (SqlConnection cnn = GetOpenConnectionToNavDatabase(serverFromFile, databaseFromFile))
             {

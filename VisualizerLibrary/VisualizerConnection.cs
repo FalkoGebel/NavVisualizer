@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using VisualizerLibrary.Models;
+﻿using VisualizerLibrary.Models;
 
 namespace VisualizerLibrary
 {
@@ -64,13 +63,15 @@ namespace VisualizerLibrary
 
                     if (dates.Contains(currentDate))
                     {
-                        vpdm.CostAmountActual = valueEntries.Where(ve => ve.PostingDate <= currentDate).Sum(ve => ve.CostAmountActual);
-                        vpdm.CostAmountExpected = valueEntries.Where(ve => ve.PostingDate <= currentDate).Sum(ve => ve.CostAmountExpected);
+                        vpdm.CostAmountActual = valueEntries.Where(ve => ve.ItemLedgerEntryType != 7 && ve.PostingDate <= currentDate).Sum(ve => ve.CostAmountActual);
+                        vpdm.CostAmountExpected = valueEntries.Where(ve => ve.ItemLedgerEntryType != 7 && ve.PostingDate <= currentDate).Sum(ve => ve.CostAmountExpected);
+                        vpdm.SalesAmountActual = valueEntries.Where(ve => ve.ItemLedgerEntryType == 2 && ve.PostingDate == currentDate).Sum(ve => ve.SalesAmountActual);
                     }
                     else
                     {
                         vpdm.CostAmountActual = lastModel.CostAmountActual;
                         vpdm.CostAmountExpected = lastModel.CostAmountExpected;
+                        vpdm.SalesAmountActual = lastModel.SalesAmountActual;
                     }
 
                     valuesPerDates.Add(vpdm);
