@@ -106,7 +106,7 @@ namespace VisualizerLibraryTests
         [TestMethod]
         public void GetCorrectNumberOfEntriesFromValuesPerDataAllDates()
         {
-            List<ValuesPerDateModel> values = Sut.GetValuesPerDateForDates();
+            List<ValuesPerDateCummulatedModel> values = Sut.GetValuesPerDateCummulatedForDates();
             values.Count.Should().Be(465);
         }
 
@@ -115,7 +115,7 @@ namespace VisualizerLibraryTests
         {
             DateTime expectedDate = new(2018, 06, 01);
             decimal expectedCostAmountActual = 97430.30M;
-            List<ValuesPerDateModel> values = Sut.GetValuesPerDateForDates();
+            List<ValuesPerDateCummulatedModel> values = Sut.GetValuesPerDateCummulatedForDates();
             values[0].Date.Should().Be(expectedDate);
             values[0].EndOfWeek.Should().BeFalse();
             values[0].EndOfMonth.Should().BeFalse();
@@ -129,7 +129,7 @@ namespace VisualizerLibraryTests
         {
             DateTime expectedDate = new(2018, 06, 30);
             decimal expectedCostAmountActual = 97430.30M;
-            List<ValuesPerDateModel> values = Sut.GetValuesPerDateForDates();
+            List<ValuesPerDateCummulatedModel> values = Sut.GetValuesPerDateCummulatedForDates();
             values[29].Date.Should().Be(expectedDate);
             values[29].EndOfWeek.Should().BeFalse();
             values[29].EndOfMonth.Should().BeTrue();
@@ -143,7 +143,7 @@ namespace VisualizerLibraryTests
         {
             DateTime expectedDate = new(2018, 12, 31);
             decimal expectedCostAmountActual = 1763089.56M;
-            List<ValuesPerDateModel> values = Sut.GetValuesPerDateForDates();
+            List<ValuesPerDateCummulatedModel> values = Sut.GetValuesPerDateCummulatedForDates();
             values[213].Date.Should().Be(expectedDate);
             values[213].EndOfWeek.Should().BeFalse();
             values[213].EndOfMonth.Should().BeTrue();
@@ -155,28 +155,28 @@ namespace VisualizerLibraryTests
         [TestMethod]
         public void GetCorrectNumberOfEntriesFromValuesPerDataWeeks()
         {
-            List<ValuesPerDateModel> values = Sut.GetValuesPerDateForWeeks();
+            List<ValuesPerDateCummulatedModel> values = Sut.GetValuesPerDateCummulatedForWeeks();
             values.Count.Should().Be(67);
         }
 
         [TestMethod]
         public void GetCorrectNumberOfEntriesFromValuesPerDataMonths()
         {
-            List<ValuesPerDateModel> values = Sut.GetValuesPerDateForMonths();
+            List<ValuesPerDateCummulatedModel> values = Sut.GetValuesPerDateCummulatedForMonths();
             values.Count.Should().Be(15);
         }
 
         [TestMethod]
         public void GetCorrectNumberOfEntriesFromValuesPerDataQuarters()
         {
-            List<ValuesPerDateModel> values = Sut.GetValuesPerDateForQuarters();
+            List<ValuesPerDateCummulatedModel> values = Sut.GetValuesPerDateCummulatedForQuarters();
             values.Count.Should().Be(5);
         }
 
         [TestMethod]
         public void GetCorrectNumberOfEntriesFromValuesPerDataYears()
         {
-            List<ValuesPerDateModel> values = Sut.GetValuesPerDateForYears();
+            List<ValuesPerDateCummulatedModel> values = Sut.GetValuesPerDateCummulatedForYears();
             values.Count.Should().Be(1);
         }
     }

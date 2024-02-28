@@ -38,21 +38,25 @@ namespace VisualizerLibrary
 
             // Create Tables
             VisualizerDatabaseLogic.CreateVisualizerDatabaseTables(VisualizerServer, VisualizerDatabase);
-            
-            // Fill "Values Per Date" Table
+
+            // Fill "Values Per Date" Tables
             List<ValueEntryModel> valueEntries = NavDatabaseLogic.GetValueEntries(NavServer, NavDatabase, Company);
+            List<DateTime> dates = [.. valueEntries.Select(ve => ve.PostingDate).Distinct().OrderBy(d => d)];
+            DateTime currentDate = dates[0];
+            DateTime endDate = dates[^1];
+
             if (valueEntries.Count > 0 )
             {
-                List<DateTime> dates = [.. valueEntries.Select(ve => ve.PostingDate).Distinct().OrderBy(d => d)];
-                DateTime currentDate = dates[0];
-                DateTime endDate = dates[^1];
-                List<ValuesPerDateModel> valuesPerDates = [];
-                ValuesPerDateModel lastModel = new();
+                List<ValuesPerDateCummulatedModel> valuesPerDatesCummulated = [];
+                ValuesPerDateCummulatedModel lastModel = new();
+                List<ValuesPerDatePlainModel> valuesPerDatesPlain = [];
+
                 while (currentDate <= endDate)
                 {
                     bool endOfMonth = currentDate.Day == DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
 
-                    ValuesPerDateModel vpdm = new()
+                    // Fill "Values Per Date Cummulated" Table
+                    ValuesPerDateCummulatedModel vpdcm = new()
                     {
                         Date = currentDate,
                         EndOfWeek = ((int)currentDate.DayOfWeek) == 0,
@@ -63,22 +67,83 @@ namespace VisualizerLibrary
 
                     if (dates.Contains(currentDate))
                     {
-                        vpdm.CostAmountActual = valueEntries.Where(ve => ve.ItemLedgerEntryType != 7 && ve.PostingDate <= currentDate).Sum(ve => ve.CostAmountActual);
-                        vpdm.CostAmountExpected = valueEntries.Where(ve => ve.ItemLedgerEntryType != 7 && ve.PostingDate <= currentDate).Sum(ve => ve.CostAmountExpected);
-                        vpdm.SalesAmountActual = valueEntries.Where(ve => ve.ItemLedgerEntryType == 2 && ve.PostingDate == currentDate).Sum(ve => ve.SalesAmountActual);
+                        vpdcm.CostAmountActual = valueEntries.Where(ve => ve.ItemLedgerEntryType != 7 && ve.PostingDate <= currentDate).Sum(ve => ve.CostAmountActual);
+                        vpdcm.CostAmountExpected = valueEntries.Where(ve => ve.ItemLedgerEntryType != 7 && ve.PostingDate <= currentDate).Sum(ve => ve.CostAmountExpected);
                     }
                     else
                     {
-                        vpdm.CostAmountActual = lastModel.CostAmountActual;
-                        vpdm.CostAmountExpected = lastModel.CostAmountExpected;
-                        vpdm.SalesAmountActual = lastModel.SalesAmountActual;
+                        vpdcm.CostAmountActual = lastModel.CostAmountActual;
+                        vpdcm.CostAmountExpected = lastModel.CostAmountExpected;
+                    }
+                    valuesPerDatesCummulated.Add(vpdcm);
+                    lastModel = vpdcm;
+
+                    // Fill "Values Per Date Plain" Table
+
+                    // Single date
+                    ValuesPerDatePlainModel vpdpm = new()
+                    {
+                        Date = currentDate,
+                        SingleDate = true,
+                        SalesAmountActual = valueEntries.Where(ve => ve.ItemLedgerEntryType == 1 && ve.PostingDate == currentDate).Sum(ve => ve.SalesAmountActual)
+                    };
+                    valuesPerDatesPlain.Add(vpdpm);
+
+                    // End of week
+                    if (currentDate.DayOfWeek == 0)
+                    {
+                        vpdpm = new()
+                        {
+                            Date = currentDate,
+                            EndOfWeek = true,
+                            SalesAmountActual = valueEntries.Where(ve => ve.ItemLedgerEntryType == 1 && ve.PostingDate > currentDate.AddDays(-7) && ve.PostingDate <= currentDate).Sum(ve => ve.SalesAmountActual)
+                        };
+                        valuesPerDatesPlain.Add(vpdpm);
                     }
 
-                    valuesPerDates.Add(vpdm);
-                    lastModel = vpdm;
+                    // End of month
+                    if (endOfMonth)
+                    {
+                        vpdpm = new()
+                        {
+                            Date = currentDate,
+                            EndOfMonth = true,
+                            SalesAmountActual = valueEntries.Where(ve => ve.ItemLedgerEntryType == 1 && ve.PostingDate > currentDate.AddMonths(-1) && ve.PostingDate <= currentDate).Sum(ve => ve.SalesAmountActual)
+                        };
+                        valuesPerDatesPlain.Add(vpdpm);
+                    }
+
+                    // End of quarter
+                    if (endOfMonth && currentDate.Month % 3 == 0)
+                    {
+                        vpdpm = new()
+                        {
+                            Date = currentDate,
+                            EndOfQuarter = true,
+                            SalesAmountActual = valueEntries.Where(ve => ve.ItemLedgerEntryType == 1 && ve.PostingDate > currentDate.AddMonths(-3) && ve.PostingDate <= currentDate).Sum(ve => ve.SalesAmountActual)
+                        };
+                        valuesPerDatesPlain.Add(vpdpm);
+                    }
+
+                    // End of year
+                    if (endOfMonth && currentDate.Month == 12)
+                    {
+                        vpdpm = new()
+                        {
+                            Date = currentDate,
+                            EndOfYear = true,
+                            SalesAmountActual = valueEntries.Where(ve => ve.ItemLedgerEntryType == 1 && ve.PostingDate > currentDate.AddMonths(-12) && ve.PostingDate <= currentDate).Sum(ve => ve.SalesAmountActual)
+                        };
+                        valuesPerDatesPlain.Add(vpdpm);
+                    }
+
+                    // TODO - with last date insert values for started periodes (week, month, quarter and year)
+                    // TODO - think about the saving of the periods
+
                     currentDate = currentDate.AddDays(1);
                 }
-                VisualizerDatabaseLogic.FillValuesPerDateTable(VisualizerServer, VisualizerDatabase, valuesPerDates);
+                VisualizerDatabaseLogic.FillValuesPerDateCummulatedTable(VisualizerServer, VisualizerDatabase, valuesPerDatesCummulated);
+                VisualizerDatabaseLogic.FillValuesPerDatePlainTable(VisualizerServer, VisualizerDatabase, valuesPerDatesPlain);
             }
         }
 
@@ -94,9 +159,9 @@ namespace VisualizerLibrary
                 throw new ArgumentException(Properties.Resources.EXP_END_BEFORE_START_DATE);
         }
 
-        public List<ValuesPerDateModel> GetValuesPerDateForDates()
+        public List<ValuesPerDateCummulatedModel> GetValuesPerDateCummulatedForDates()
         {
-            List<ValuesPerDateModel> output = VisualizerDatabaseLogic.GetValuesPerDateEntries(VisualizerServer, VisualizerDatabase);
+            List<ValuesPerDateCummulatedModel> output = VisualizerDatabaseLogic.GetValuesPerDateCummulatedEntries(VisualizerServer, VisualizerDatabase);
 
             if (StartDate != null)
                 output = output.Where(e => e.Date >= StartDate).ToList();
@@ -107,24 +172,62 @@ namespace VisualizerLibrary
             return output;
         }
 
-        public List<ValuesPerDateModel> GetValuesPerDateForWeeks()
+        public List<ValuesPerDateCummulatedModel> GetValuesPerDateCummulatedForWeeks()
         {
-            return GetValuesPerDateForDates().Where(e => e.EndOfWeek).ToList();
+            return GetValuesPerDateCummulatedForDates().Where(e => e.EndOfWeek).ToList();
         }
 
-        public List<ValuesPerDateModel> GetValuesPerDateForMonths()
+        public List<ValuesPerDateCummulatedModel> GetValuesPerDateCummulatedForMonths()
         {
-            return GetValuesPerDateForDates().Where(e => e.EndOfMonth).ToList();
+            return GetValuesPerDateCummulatedForDates().Where(e => e.EndOfMonth).ToList();
         }
 
-        public List<ValuesPerDateModel> GetValuesPerDateForQuarters()
+        public List<ValuesPerDateCummulatedModel> GetValuesPerDateCummulatedForQuarters()
         {
-            return GetValuesPerDateForDates().Where(e => e.EndOfQuarter).ToList();
+            return GetValuesPerDateCummulatedForDates().Where(e => e.EndOfQuarter).ToList();
         }
 
-        public List<ValuesPerDateModel> GetValuesPerDateForYears()
+        public List<ValuesPerDateCummulatedModel> GetValuesPerDateCummulatedForYears()
         {
-            return GetValuesPerDateForDates().Where(e => e.EndOfYear).ToList();
+            return GetValuesPerDateCummulatedForDates().Where(e => e.EndOfYear).ToList();
+        }
+
+        public List<ValuesPerDatePlainModel> GetValuesPerDatePlain()
+        {
+            List<ValuesPerDatePlainModel> output = VisualizerDatabaseLogic.GetValuesPerDatePlainEntries(VisualizerServer, VisualizerDatabase);
+
+            if (StartDate != null)
+                output = output.Where(e => e.Date >= StartDate).ToList();
+
+            if (EndDate != null)
+                output = output.Where(e => e.Date <= EndDate).ToList();
+
+            return output;
+        }
+
+        public List<ValuesPerDatePlainModel> GetValuesPerDatePlainForDates()
+        {
+            return GetValuesPerDatePlain().Where(e => e.SingleDate).ToList();
+        }
+
+        public List<ValuesPerDatePlainModel> GetValuesPerDatePlainForWeeks()
+        {
+            return GetValuesPerDatePlain().Where(e => e.EndOfWeek).ToList();
+        }
+
+        public List<ValuesPerDatePlainModel> GetValuesPerDatePlainForMonths()
+        {
+            return GetValuesPerDatePlain().Where(e => e.EndOfMonth).ToList();
+        }
+
+        public List<ValuesPerDatePlainModel> GetValuesPerDatePlainForQuarters()
+        {
+            return GetValuesPerDatePlain().Where(e => e.EndOfQuarter).ToList();
+        }
+
+        public List<ValuesPerDatePlainModel> GetValuesPerDatePlainForYears()
+        {
+            return GetValuesPerDatePlain().Where(e => e.EndOfYear).ToList();
         }
     }
 }

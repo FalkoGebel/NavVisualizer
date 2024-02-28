@@ -52,7 +52,7 @@ namespace VisualizerUI
         {
             CostAmountDvcChart.Title = Properties.Resources.CHART_COST_AMT_TITLE;
 
-            List<ValuesPerDateModel> values = GetValuesPerDateByCurrentPeriodType();
+            List<ValuesPerDateCummulatedModel> values = GetValuesPerDateCummulatedByCurrentPeriodType();
 
             List<KeyValuePair<DateTime, decimal>> keyValuePairsCostAmountActual = [];
             List<KeyValuePair<DateTime, decimal>> keyValuePairsCostAmountExpected = [];
@@ -139,20 +139,42 @@ namespace VisualizerUI
             }
         }
 
-        private List<ValuesPerDateModel> GetValuesPerDateByCurrentPeriodType()
+        private List<ValuesPerDateCummulatedModel> GetValuesPerDateCummulatedByCurrentPeriodType()
         {
             try
             {
                 if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_DAY)
-                    return Connection.GetValuesPerDateForDates();
+                    return Connection.GetValuesPerDateCummulatedForDates();
                 else if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_WEEK)
-                    return Connection.GetValuesPerDateForWeeks();
+                    return Connection.GetValuesPerDateCummulatedForWeeks();
                 else if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_MONTH)
-                    return Connection.GetValuesPerDateForMonths();
+                    return Connection.GetValuesPerDateCummulatedForMonths();
                 else if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_QUARTER)
-                    return Connection.GetValuesPerDateForQuarters();
+                    return Connection.GetValuesPerDateCummulatedForQuarters();
                 else
-                    return Connection.GetValuesPerDateForYears();
+                    return Connection.GetValuesPerDateCummulatedForYears();
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(Properties.Resources.ERROR_UPDATE_CHART, Properties.Resources.ERROR_TITLE,MessageBoxButton.OK,MessageBoxImage.Error);
+                return new List<ValuesPerDateCummulatedModel>();
+            }
+        }
+
+        private List<ValuesPerDatePlainModel> GetValuesPerDatePlainByCurrentPeriodType()
+        {
+            try
+            {
+                if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_DAY)
+                    return Connection.GetValuesPerDatePlainForDates();
+                else if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_WEEK)
+                    return Connection.GetValuesPerDatePlainForWeeks();
+                else if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_MONTH)
+                    return Connection.GetValuesPerDatePlainForMonths();
+                else if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_QUARTER)
+                    return Connection.GetValuesPerDatePlainForQuarters();
+                else
+                    return Connection.GetValuesPerDatePlainForYears();
             }
             catch (Exception exp)
             {
@@ -164,7 +186,7 @@ namespace VisualizerUI
         {
             CostAmountDvcChart.Title = Properties.Resources.CHART_SALES_AMT_TITLE;
 
-            List<ValuesPerDateModel> values = GetValuesPerDateByCurrentPeriodType();
+            List<ValuesPerDatePlainModel> values = GetValuesPerDatePlainByCurrentPeriodType();
 
             List<KeyValuePair<DateTime, decimal>> keyValuePairsSalesAmountActual = [];
 
