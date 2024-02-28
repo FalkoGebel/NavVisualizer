@@ -196,6 +196,24 @@ namespace VisualizerUI.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Error ähnelt.
+        /// </summary>
+        public static string ERROR_TITLE {
+            get {
+                return ResourceManager.GetString("ERROR_TITLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Error during updating chart! Please update Visualizer Database. ähnelt.
+        /// </summary>
+        public static string ERROR_UPDATE_CHART {
+            get {
+                return ResourceManager.GetString("ERROR_UPDATE_CHART", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die NAV Visualizer ähnelt.
         /// </summary>
         public static string MAIN_WINDOW_TITLE {
