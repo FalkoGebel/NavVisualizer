@@ -1,4 +1,5 @@
 ﻿using VisualizerLibrary.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace VisualizerLibrary
 {
@@ -50,13 +51,16 @@ namespace VisualizerLibrary
                 List<ValuesPerDateCummulatedModel> valuesPerDatesCummulated = [];
                 ValuesPerDateCummulatedModel lastModel = new();
                 List<ValuesPerDatePlainModel> valuesPerDatesPlain = [];
+                ValuesPerDateCummulatedModel vpdcm;
+                ValuesPerDatePlainModel vpdpm;
+                bool endOfMonth;
 
                 while (currentDate <= endDate)
                 {
-                    bool endOfMonth = currentDate.Day == DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
+                    endOfMonth = currentDate.Day == DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
 
                     // Fill "Values Per Date Cummulated" Table
-                    ValuesPerDateCummulatedModel vpdcm = new()
+                    vpdcm = new()
                     {
                         Date = currentDate,
                         EndOfWeek = ((int)currentDate.DayOfWeek) == 0,
@@ -81,7 +85,7 @@ namespace VisualizerLibrary
                     // Fill "Values Per Date Plain" Table
 
                     // Single date
-                    ValuesPerDatePlainModel vpdpm = new()
+                    vpdpm = new()
                     {
                         Date = currentDate,
                         SingleDate = true,
@@ -137,12 +141,70 @@ namespace VisualizerLibrary
                         valuesPerDatesPlain.Add(vpdpm);
                     }
 
-                    // TODO - with last date insert values for started periodes (week, month, quarter and year)
                     // TODO - think about the saving of the periods
 
                     currentDate = currentDate.AddDays(1);
                 }
                 VisualizerDatabaseLogic.FillValuesPerDateCummulatedTable(VisualizerServer, VisualizerDatabase, valuesPerDatesCummulated);
+
+                // Add end of week for end date
+                if (endDate.DayOfWeek != 0)
+                {
+                    DateTime endOfWeek = endDate.AddDays(7 - (int)endDate.DayOfWeek);
+                    vpdpm = new()
+                    {
+                        Date = endOfWeek,
+                        EndOfWeek = true,
+                        SalesAmountActual = valueEntries.Where(ve => ve.ItemLedgerEntryType == 1 && ve.PostingDate > endOfWeek.AddDays(-7) && ve.PostingDate <= endOfWeek).Sum(ve => ve.SalesAmountActual)
+                    };
+                    valuesPerDatesPlain.Add(vpdpm);
+                }
+                
+                endOfMonth = endDate.Day == DateTime.DaysInMonth(endDate.Year, endDate.Month);
+
+                // Add end of month for end date
+                if (!endOfMonth)
+                {
+                    DateTime endOfThisMonth = new(endDate.Year, endDate.Month, DateTime.DaysInMonth(endDate.Year, endDate.Month));
+                    vpdpm = new()
+                    {
+                        Date = endOfThisMonth,
+                        EndOfMonth = true,
+                        SalesAmountActual = valueEntries.Where(ve => ve.ItemLedgerEntryType == 1 && ve.PostingDate > endOfThisMonth.AddMonths(-1) && ve.PostingDate <= endOfThisMonth).Sum(ve => ve.SalesAmountActual)
+                    };
+                    valuesPerDatesPlain.Add(vpdpm);
+                }
+
+                // Add end of quarter for end date
+                if (!(endOfMonth && endDate.Month % 3 == 0))
+                {
+                    DateTime endOfQuarter = new(endDate.Year, endDate.Month, DateTime.DaysInMonth(endDate.Year, endDate.Month));
+                    
+                    while (endOfQuarter.Month % 3 != 0)
+                        endOfQuarter.AddMonths(1);
+
+                    vpdpm = new()
+                    {
+                        Date = endOfQuarter,
+                        EndOfQuarter = true,
+                        SalesAmountActual = valueEntries.Where(ve => ve.ItemLedgerEntryType == 1 && ve.PostingDate > endOfQuarter.AddMonths(-3) && ve.PostingDate <= endOfQuarter).Sum(ve => ve.SalesAmountActual)
+                    };
+                    valuesPerDatesPlain.Add(vpdpm);
+                }
+
+                // Add end of year for end date
+                if (!(endOfMonth && endDate.Month == 12))
+                {
+                    DateTime endOfYear = new(endDate.Year, 12, 31);
+                    vpdpm = new()
+                    {
+                        Date = endOfYear,
+                        EndOfYear = true,
+                        SalesAmountActual = valueEntries.Where(ve => ve.ItemLedgerEntryType == 1 && ve.PostingDate > endOfYear.AddMonths(-12) && ve.PostingDate <= endOfYear).Sum(ve => ve.SalesAmountActual)
+                    };
+                    valuesPerDatesPlain.Add(vpdpm);
+                }
+
                 VisualizerDatabaseLogic.FillValuesPerDatePlainTable(VisualizerServer, VisualizerDatabase, valuesPerDatesPlain);
             }
         }
