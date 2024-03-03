@@ -188,13 +188,32 @@ namespace VisualizerUI
 
             List<ValuesPerDatePlainModel> values = GetValuesPerDatePlainByCurrentPeriodType();
 
-            List<KeyValuePair<DateTime, decimal>> keyValuePairsSalesAmountActual = [];
+            if (values.Count == 0)
+                return;
 
-            foreach (var value in values)
-                keyValuePairsSalesAmountActual.Add(new KeyValuePair<DateTime, decimal>(value.Date, value.SalesAmountActual));
+            List<KeyValuePair<string, decimal>> keyValuePairsSalesAmountActual = [];
+            List<KeyValuePair<DateTime, decimal>> keyValuePairsSalesAmountActualDate = [];
+
+            if (values[0].SingleDate)
+            {
+                foreach (var value in values)
+                    keyValuePairsSalesAmountActualDate.Add(new KeyValuePair<DateTime, decimal>(value.Date, value.SalesAmountActual));
+            }
+            else
+            {
+                for (int i = 0; i < values.Count; i++)
+                {
+                    var value = values[i];
+
+                    if (i == 0)
+                        keyValuePairsSalesAmountActual.Add(new KeyValuePair<string, decimal>(value.LongChartLabel, value.SalesAmountActual));
+                    else
+                        keyValuePairsSalesAmountActual.Add(new KeyValuePair<string, decimal>(value.ChartLabel, value.SalesAmountActual));
+                }
+            }
 
             Style style = new();
-            style.Setters.Add(new Setter(BackgroundProperty, Brushes.Black));
+            style.Setters.Add(new Setter(BackgroundProperty, Brushes.DarkBlue));
 
             if (ChartTypeComboBox.Items.GetItemAt(ChartTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_CHART_TYPES_COLUMN)
             {
@@ -205,7 +224,7 @@ namespace VisualizerUI
                     IndependentValueBinding = new Binding("Key"),
                     DependentValueBinding = new Binding("Value"),
                     DataPointStyle = style,
-                    ItemsSource = keyValuePairsSalesAmountActual,
+                    ItemsSource = values[0].SingleDate ? keyValuePairsSalesAmountActualDate : keyValuePairsSalesAmountActual,
                     Title = Properties.Resources.CHART_SALES_AMT_ACT_LEGEND
                 };
 

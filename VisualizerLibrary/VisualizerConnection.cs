@@ -1,5 +1,4 @@
 ﻿using VisualizerLibrary.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace VisualizerLibrary
 {
@@ -140,8 +139,6 @@ namespace VisualizerLibrary
                         };
                         valuesPerDatesPlain.Add(vpdpm);
                     }
-
-                    // TODO - think about the saving of the periods
 
                     currentDate = currentDate.AddDays(1);
                 }
