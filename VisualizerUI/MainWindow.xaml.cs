@@ -14,8 +14,8 @@ namespace VisualizerUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private VisualizerConnection Connection = new("", "", "", "", "");
-        private bool ReadyToChart = false;
+        private VisualizerConnection _connection = new("", "", "", "", "");
+        private bool _readyToChart = false;
 
         public MainWindow()
         {
@@ -26,26 +26,12 @@ namespace VisualizerUI
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
 
-            // TODO - for testing purposes only ... start
-            string[] connectionFileData = File.ReadAllLines(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/NavVisualizerTestConnectionData.txt");
-
-            NavServerTextBox.Text = connectionFileData[0];
-            NavDatabaseTextBox.Text = connectionFileData[1];
-            CompanyTextBox.Text = connectionFileData[2];
-            VisualizerServerTextBox.Text = connectionFileData[3];
-            VisualizerDatabaseTextBox.Text = connectionFileData[4];
-            // for testing purposes only ... end
-
             InitializeComboBoxItems();
-
-            ReadyToChart = true;
-            
-            UpdateChart();
         }
 
         private void UpdateConnection()
         {
-            Connection = new(NavServerTextBox.Text, NavDatabaseTextBox.Text, CompanyTextBox.Text, VisualizerServerTextBox.Text, VisualizerDatabaseTextBox.Text);
+            _connection = new(NavServerTextBox.Text, NavDatabaseTextBox.Text, CompanyTextBox.Text, VisualizerServerTextBox.Text, VisualizerDatabaseTextBox.Text);
         }
 
         private void AddCostAmountSeriesToChart()
@@ -135,7 +121,7 @@ namespace VisualizerUI
                     CostAmountDvcChart.Series.Add(cs);
                 }
                 else
-                    MessageBox.Show("Not Implemented");
+                    throw new InvalidDataException(Properties.Resources.ERROR_INVALID_OPTION);
             }
         }
 
@@ -144,21 +130,26 @@ namespace VisualizerUI
             try
             {
                 if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_DAY)
-                    return Connection.GetValuesPerDateCummulatedForDates();
+                    return _connection.GetValuesPerDateCummulatedForDates();
                 else if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_WEEK)
-                    return Connection.GetValuesPerDateCummulatedForWeeks();
+                    return _connection.GetValuesPerDateCummulatedForWeeks();
                 else if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_MONTH)
-                    return Connection.GetValuesPerDateCummulatedForMonths();
+                    return _connection.GetValuesPerDateCummulatedForMonths();
                 else if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_QUARTER)
-                    return Connection.GetValuesPerDateCummulatedForQuarters();
+                    return _connection.GetValuesPerDateCummulatedForQuarters();
                 else
-                    return Connection.GetValuesPerDateCummulatedForYears();
+                    return _connection.GetValuesPerDateCummulatedForYears();
             }
-            catch (Exception exp)
+            catch
             {
-                MessageBox.Show(Properties.Resources.ERROR_UPDATE_CHART, Properties.Resources.ERROR_TITLE,MessageBoxButton.OK,MessageBoxImage.Error);
-                return new List<ValuesPerDateCummulatedModel>();
+                ShowError(Properties.Resources.ERROR_UPDATE_CHART);
+                return [];
             }
+        }
+
+        private static void ShowError(string msg)
+        {
+            MessageBox.Show(msg, Properties.Resources.ERROR_TITLE, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private List<ValuesPerDatePlainModel> GetValuesPerDatePlainByCurrentPeriodType()
@@ -166,15 +157,15 @@ namespace VisualizerUI
             try
             {
                 if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_DAY)
-                    return Connection.GetValuesPerDatePlainForDates();
+                    return _connection.GetValuesPerDatePlainForDates();
                 else if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_WEEK)
-                    return Connection.GetValuesPerDatePlainForWeeks();
+                    return _connection.GetValuesPerDatePlainForWeeks();
                 else if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_MONTH)
-                    return Connection.GetValuesPerDatePlainForMonths();
+                    return _connection.GetValuesPerDatePlainForMonths();
                 else if (PeriodTypeComboBox.Items.GetItemAt(PeriodTypeComboBox.SelectedIndex).ToString() == Properties.Resources.CB_PERIOD_TYPE_QUARTER)
-                    return Connection.GetValuesPerDatePlainForQuarters();
+                    return _connection.GetValuesPerDatePlainForQuarters();
                 else
-                    return Connection.GetValuesPerDatePlainForYears();
+                    return _connection.GetValuesPerDatePlainForYears();
             }
             catch (Exception exp)
             {
@@ -231,7 +222,7 @@ namespace VisualizerUI
                 CostAmountDvcChart.Series.Add(cs);
             }
             else
-                MessageBox.Show("Not Implemented");
+                throw new InvalidDataException(Properties.Resources.ERROR_INVALID_OPTION);
         }
 
         private void InitializeComboBoxItems()
@@ -252,32 +243,78 @@ namespace VisualizerUI
 
         private void UpdateChart()
         {
-            if (!ReadyToChart)
+            if (!_readyToChart)
                 return;
             
             CostAmountDvcChart.Series.Clear();
 
             UpdateConnection();
-            Connection.SetDateFilter(StartDatePicker.SelectedDate, EndDatePicker.SelectedDate);
+            _connection.SetDateFilter(StartDatePicker.SelectedDate, EndDatePicker.SelectedDate);
 
             if (KeyFigureComboBox.Items.GetItemAt(KeyFigureComboBox.SelectedIndex).ToString() == Properties.Resources.CB_KEY_FIGURE_COST_AMOUNT)
                 AddCostAmountSeriesToChart();
             else if (KeyFigureComboBox.Items.GetItemAt(KeyFigureComboBox.SelectedIndex).ToString() == Properties.Resources.CB_KEY_FIGURE_SALES_AMOUNT)
                 AddSalesAmountSeriesToChart();
             else
-                MessageBox.Show("Not Implemented");
+                throw new InvalidDataException(Properties.Resources.ERROR_INVALID_OPTION);
         }
 
-        private void UpdateCostAmountChartButton_Click_1(object sender, RoutedEventArgs e)
+        private void UpdateDatabaseButton_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateVisualizerDatabaseFromNAVDatabase();
+        }
+
+        private void UpdateVisualizerDatabaseFromNAVDatabase()
         {
             UpdateConnection();
-            Connection.UpdateVisualizerDatabaseFromNavDatabase();
-            MessageBox.Show("Update gelaufen");
+            if (_connection.NavServer == "")
+            {
+                ShowError(Properties.Resources.ERROR_NAV_SERVER_MISSING);
+                return;
+            }
+            if (_connection.NavDatabase == "")
+            {
+                ShowError(Properties.Resources.ERROR_NAV_DATABASE_MISSING);
+                return;
+            }
+            if (_connection.Company == "")
+            {
+                ShowError(Properties.Resources.ERROR_COMPANY_MISSING);
+                return;
+            }
+            if (_connection.VisualizerServer == "")
+            {
+                ShowError(Properties.Resources.ERROR_VISUALIZER_SERVER_MISSING);
+                return;
+            }
+            if (_connection.VisualizerDatabase == "")
+            {
+                ShowError(Properties.Resources.ERROR_VISUALIZER_DATABASE_MISSING);
+                return;
+            }
+            try
+            {
+                _connection.UpdateVisualizerDatabaseFromNavDatabase();
+            }
+            catch (Exception exp)
+            {
+                ShowError(exp.Message);
+                return;
+            }
+            ShowMessage(Properties.Resources.MSG_UPDATE_DONE);
             UpdateChart();
+        }
+
+        private static void ShowMessage(string msg)
+        {
+            MessageBox.Show(msg, Properties.Resources.MSG_TITLE, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void UpdateChartTypeComboBoxItems(string keyFigure)
         {
+            if (keyFigure == "")
+                return;
+            
             ChartTypeComboBox.Items.Clear();
             if (keyFigure == Properties.Resources.CB_KEY_FIGURE_COST_AMOUNT)
             {
@@ -291,37 +328,32 @@ namespace VisualizerUI
                 ChartTypeComboBox.SelectedIndex = 0;
         }
 
-        private void KeyFigureComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void KeyFigureComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ReadyToChart = false;
-            UpdateChartTypeComboBoxItems(e.AddedItems[0].ToString());
-            ReadyToChart = true;
+            _readyToChart = false;
+            UpdateChartTypeComboBoxItems(e.AddedItems[0]?.ToString() ?? "");
+            _readyToChart = true;
             if (((ComboBox)sender).IsLoaded)
                 UpdateChart();
         }
 
-        private void ChartTypeComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void ChartTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (((ComboBox)sender).IsLoaded)
                 UpdateChart();
         }
 
-        private void StartDatePicker_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void StartDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateChart();
         }
 
-        private void EndDatePicker_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void EndDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateChart();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            UpdateChart();
-        }
-
-        private void PeriodTypeComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void PeriodTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateChart();
         }

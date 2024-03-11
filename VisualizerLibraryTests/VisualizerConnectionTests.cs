@@ -7,26 +7,28 @@ namespace VisualizerLibraryTests
     [TestClass]
     public class VisualizerConnectionTests
     {
-        private static string NavServerFromFile = "";
-        private static string NavDatabaseFromFile = "";
-        private static string CompanyFromFile = "";
-        private static string VisualizerServerFromFile = "";
-        private static string VisualizerDatabaseFromFile = "";
-        private static VisualizerConnection Sut;
+        private static string _navServerFromFile = "";
+        private static string _navDatabaseFromFile = "";
+        private static string _companyFromFile = "";
+        private static string _visualizerServerFromFile = "";
+        private static string _visualizerDatabaseFromFile = "";
+        private static VisualizerConnection _sut = new();
 
         [ClassInitialize]
+#pragma warning disable IDE0060 // Nicht verwendete Parameter entfernen
         public static void ClassInitialize(TestContext context)
+#pragma warning restore IDE0060 // Nicht verwendete Parameter entfernen
         {
             string[] connectionFileData = File.ReadAllLines(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/NavVisualizerTestConnectionData.txt");
 
-            NavServerFromFile = connectionFileData[0];
-            NavDatabaseFromFile = connectionFileData[1];
-            CompanyFromFile = connectionFileData[2];
-            VisualizerServerFromFile = connectionFileData[3];
-            VisualizerDatabaseFromFile = connectionFileData[4];
+            _navServerFromFile = connectionFileData[0];
+            _navDatabaseFromFile = connectionFileData[1];
+            _companyFromFile = connectionFileData[2];
+            _visualizerServerFromFile = connectionFileData[3];
+            _visualizerDatabaseFromFile = connectionFileData[4];
 
-            Sut = new(NavServerFromFile, NavDatabaseFromFile, CompanyFromFile, VisualizerServerFromFile, VisualizerDatabaseFromFile);
-            Sut.UpdateVisualizerDatabaseFromNavDatabase();
+            _sut = new(_navServerFromFile, _navDatabaseFromFile, _companyFromFile, _visualizerServerFromFile, _visualizerDatabaseFromFile);
+            _sut.UpdateVisualizerDatabaseFromNavDatabase();
         }
 
         [TestMethod]
@@ -35,10 +37,10 @@ namespace VisualizerLibraryTests
             DateTime? start = null;
             DateTime? end = null;
 
-            Sut.SetDateFilter(start, end);
+            _sut.SetDateFilter(start, end);
 
-            Sut.StartDate.Should().BeNull();
-            Sut.EndDate.Should().BeNull();
+            _sut.StartDate.Should().BeNull();
+            _sut.EndDate.Should().BeNull();
         }
 
         [TestMethod]
@@ -47,10 +49,10 @@ namespace VisualizerLibraryTests
             DateTime start = new(2019, 02, 01);
             DateTime? end = null;
 
-            Sut.SetDateFilter(start, end);
+            _sut.SetDateFilter(start, end);
             
-            Sut.StartDate.Should().Be(start);
-            Sut.EndDate.Should().BeNull();
+            _sut.StartDate.Should().Be(start);
+            _sut.EndDate.Should().BeNull();
         }
 
         [TestMethod]
@@ -58,12 +60,11 @@ namespace VisualizerLibraryTests
         {
             DateTime? start = null;
             DateTime end = new(2019, 02, 01);
-            string expected = "..2019-02-01";
 
-            Sut.SetDateFilter(start, end);
+            _sut.SetDateFilter(start, end);
 
-            Sut.StartDate.Should().BeNull();
-            Sut.EndDate.Should().Be(end);
+            _sut.StartDate.Should().BeNull();
+            _sut.EndDate.Should().Be(end);
         }
 
         [TestMethod]
@@ -71,12 +72,11 @@ namespace VisualizerLibraryTests
         {
             DateTime start = new(2019, 02, 01);
             DateTime end = new(2019, 02, 01);
-            string expected = "2019-02-01..2019-02-01";
 
-            Sut.SetDateFilter(start, end);
+            _sut.SetDateFilter(start, end);
 
-            Sut.StartDate.Should().Be(start);
-            Sut.EndDate.Should().Be(end);
+            _sut.StartDate.Should().Be(start);
+            _sut.EndDate.Should().Be(end);
         }
 
         [TestMethod]
@@ -84,12 +84,11 @@ namespace VisualizerLibraryTests
         {
             DateTime start = new(2019, 02, 01);
             DateTime end = new(2019, 05, 01);
-            string expected = "2019-02-01..2019-05-01";
 
-            Sut.SetDateFilter(start, end);
+            _sut.SetDateFilter(start, end);
 
-            Sut.StartDate.Should().Be(start);
-            Sut.EndDate.Should().Be(end);
+            _sut.StartDate.Should().Be(start);
+            _sut.EndDate.Should().Be(end);
         }
 
         [TestMethod]
@@ -98,7 +97,7 @@ namespace VisualizerLibraryTests
             DateTime start = new(2019, 02, 01);
             DateTime end = new(2019, 01, 01);
 
-            Action act = () => Sut.SetDateFilter(start, end);
+            Action act = () => _sut.SetDateFilter(start, end);
 
             act.Should().Throw<ArgumentException>().WithMessage("End date must not be earlier than start date");
         }
@@ -106,7 +105,7 @@ namespace VisualizerLibraryTests
         [TestMethod]
         public void GetCorrectNumberOfEntriesFromValuesPerDataAllDates()
         {
-            List<ValuesPerDateCummulatedModel> values = Sut.GetValuesPerDateCummulatedForDates();
+            List<ValuesPerDateCummulatedModel> values = _sut.GetValuesPerDateCummulatedForDates();
             values.Count.Should().Be(465);
         }
 
@@ -115,7 +114,7 @@ namespace VisualizerLibraryTests
         {
             DateTime expectedDate = new(2018, 06, 01);
             decimal expectedCostAmountActual = 97430.30M;
-            List<ValuesPerDateCummulatedModel> values = Sut.GetValuesPerDateCummulatedForDates();
+            List<ValuesPerDateCummulatedModel> values = _sut.GetValuesPerDateCummulatedForDates();
             values[0].Date.Should().Be(expectedDate);
             values[0].EndOfWeek.Should().BeFalse();
             values[0].EndOfMonth.Should().BeFalse();
@@ -129,7 +128,7 @@ namespace VisualizerLibraryTests
         {
             DateTime expectedDate = new(2018, 06, 30);
             decimal expectedCostAmountActual = 97430.30M;
-            List<ValuesPerDateCummulatedModel> values = Sut.GetValuesPerDateCummulatedForDates();
+            List<ValuesPerDateCummulatedModel> values = _sut.GetValuesPerDateCummulatedForDates();
             values[29].Date.Should().Be(expectedDate);
             values[29].EndOfWeek.Should().BeFalse();
             values[29].EndOfMonth.Should().BeTrue();
@@ -143,7 +142,7 @@ namespace VisualizerLibraryTests
         {
             DateTime expectedDate = new(2018, 12, 31);
             decimal expectedCostAmountActual = 1763089.56M;
-            List<ValuesPerDateCummulatedModel> values = Sut.GetValuesPerDateCummulatedForDates();
+            List<ValuesPerDateCummulatedModel> values = _sut.GetValuesPerDateCummulatedForDates();
             values[213].Date.Should().Be(expectedDate);
             values[213].EndOfWeek.Should().BeFalse();
             values[213].EndOfMonth.Should().BeTrue();
@@ -155,28 +154,28 @@ namespace VisualizerLibraryTests
         [TestMethod]
         public void GetCorrectNumberOfEntriesFromValuesPerDataWeeks()
         {
-            List<ValuesPerDateCummulatedModel> values = Sut.GetValuesPerDateCummulatedForWeeks();
+            List<ValuesPerDateCummulatedModel> values = _sut.GetValuesPerDateCummulatedForWeeks();
             values.Count.Should().Be(67);
         }
 
         [TestMethod]
         public void GetCorrectNumberOfEntriesFromValuesPerDataMonths()
         {
-            List<ValuesPerDateCummulatedModel> values = Sut.GetValuesPerDateCummulatedForMonths();
+            List<ValuesPerDateCummulatedModel> values = _sut.GetValuesPerDateCummulatedForMonths();
             values.Count.Should().Be(15);
         }
 
         [TestMethod]
         public void GetCorrectNumberOfEntriesFromValuesPerDataQuarters()
         {
-            List<ValuesPerDateCummulatedModel> values = Sut.GetValuesPerDateCummulatedForQuarters();
+            List<ValuesPerDateCummulatedModel> values = _sut.GetValuesPerDateCummulatedForQuarters();
             values.Count.Should().Be(5);
         }
 
         [TestMethod]
         public void GetCorrectNumberOfEntriesFromValuesPerDataYears()
         {
-            List<ValuesPerDateCummulatedModel> values = Sut.GetValuesPerDateCummulatedForYears();
+            List<ValuesPerDateCummulatedModel> values = _sut.GetValuesPerDateCummulatedForYears();
             values.Count.Should().Be(1);
         }
     }

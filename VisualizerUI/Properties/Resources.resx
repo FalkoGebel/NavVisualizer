@@ -162,14 +162,38 @@
   <data name="CHART_SALES_AMT_TITLE" xml:space="preserve">
     <value>Sales Amount</value>
   </data>
+  <data name="ERROR_COMPANY_MISSING" xml:space="preserve">
+    <value>No Company specified</value>
+  </data>
+  <data name="ERROR_INVALID_OPTION" xml:space="preserve">
+    <value>You have choosen an option which is not valid or not implemented!</value>
+  </data>
+  <data name="ERROR_NAV_DATABASE_MISSING" xml:space="preserve">
+    <value>No NAV Database specified</value>
+  </data>
+  <data name="ERROR_NAV_SERVER_MISSING" xml:space="preserve">
+    <value>No NAV Server specified</value>
+  </data>
   <data name="ERROR_TITLE" xml:space="preserve">
     <value>Error</value>
   </data>
   <data name="ERROR_UPDATE_CHART" xml:space="preserve">
     <value>Error during updating chart! Please update Visualizer Database.</value>
   </data>
+  <data name="ERROR_VISUALIZER_DATABASE_MISSING" xml:space="preserve">
+    <value>No Visualizer Database specified</value>
+  </data>
+  <data name="ERROR_VISUALIZER_SERVER_MISSING" xml:space="preserve">
+    <value>No Visualizer Server specified</value>
+  </data>
   <data name="MAIN_WINDOW_TITLE" xml:space="preserve">
     <value>NAV Visualizer</value>
+  </data>
+  <data name="MSG_TITLE" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="MSG_UPDATE_DONE" xml:space="preserve">
+    <value>Visualizer Database updated</value>
   </data>
   <data name="MW_CHART_TYPE_LABEL" xml:space="preserve">
     <value>Chart Type:</value>
