@@ -9,7 +9,7 @@
         xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
         x:Class="VisualizerUI.MainWindow"
         mc:Ignorable="d"
-        Title="{x:Static p:Resources.MAIN_WINDOW_TITLE}" Icon="/Assets/NV_darkgray_near_black_background_24x24.png" WindowStartupLocation="CenterScreen" WindowState="Maximized" Loaded="Window_Loaded">
+        Title="{x:Static p:Resources.MAIN_WINDOW_TITLE}" Icon="/Assets/NV_darkgray_near_black_background_24x24.png" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Window.Resources>
         <toolkit:StringFormatConverter x:Key="StringFormatConverter"/>
     </Window.Resources>
@@ -35,7 +35,7 @@
             <TextBox x:Name="VisualizerServerTextBox" Width="200" VerticalAlignment="Center" Margin="5,0,0,0"/>
             <Label Content="{x:Static p:Resources.MW_VISUALIZER_DATABASE_LABEL}" VerticalAlignment="Center" Margin="5,0,0,0"/>
             <TextBox x:Name="VisualizerDatabaseTextBox" Width="200" VerticalAlignment="Center" Margin="5,0,0,0"/>
-            <Button x:Name="UpdateCostAmountChartButton" Content="{x:Static p:Resources.MW_UPDATE_DATABASE_BUTTON_TEXT}" VerticalAlignment="Center" Padding="3" Margin="5,0,5,0" Click="UpdateCostAmountChartButton_Click_1"/>
+            <Button x:Name="UpdateDatabaseButton" Content="{x:Static p:Resources.MW_UPDATE_DATABASE_BUTTON_TEXT}" VerticalAlignment="Center" Padding="3" Margin="5,0,5,0" Click="UpdateDatabaseButton_Click"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="5,0,5,0">
             <Label Content="{x:Static p:Resources.MW_START_DATE_LABEL}" VerticalAlignment="Center"/>

@@ -7,25 +7,27 @@ namespace VisualizerLibraryTests
     [TestClass]
     public class VisualizerLogicValueEntryTests
     {
-        private static string NavServerFromFile = "";
-        private static string NavDatabaseFromFile = "";
-        private static string CompanyFromFile = "";
+        private static string _navServerFromFile = "";
+        private static string _navDatabaseFromFile = "";
+        private static string _companyFromFile = "";
 
         [ClassInitialize]
+#pragma warning disable IDE0060 // Nicht verwendete Parameter entfernen
         public static void ClassInitialize(TestContext context)
+#pragma warning restore IDE0060 // Nicht verwendete Parameter entfernen
         {
             string[] connectionFileData = File.ReadAllLines(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/NavVisualizerTestConnectionData.txt");
 
-            NavServerFromFile = connectionFileData[0];
-            NavDatabaseFromFile = connectionFileData[1];
-            CompanyFromFile = connectionFileData[2];
+            _navServerFromFile = connectionFileData[0];
+            _navDatabaseFromFile = connectionFileData[1];
+            _companyFromFile = connectionFileData[2];
         }
 
         [TestMethod]
         public void GetAllValueEntriesAndNumberIsCorrect()
         {
             int expectedNumber = 389;
-            List<ValueEntryModel> ValueEntries = NavDatabaseLogic.GetValueEntries(NavServerFromFile, NavDatabaseFromFile, CompanyFromFile);
+            List<ValueEntryModel> ValueEntries = NavDatabaseLogic.GetValueEntries(_navServerFromFile, _navDatabaseFromFile, _companyFromFile);
             ValueEntries.Count.Should().Be(expectedNumber);
         }
     }

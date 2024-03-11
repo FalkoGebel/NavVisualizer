@@ -196,6 +196,42 @@ namespace VisualizerUI.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No Company specified ähnelt.
+        /// </summary>
+        public static string ERROR_COMPANY_MISSING {
+            get {
+                return ResourceManager.GetString("ERROR_COMPANY_MISSING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die You have choosen an option which is not valid or not implemented! ähnelt.
+        /// </summary>
+        public static string ERROR_INVALID_OPTION {
+            get {
+                return ResourceManager.GetString("ERROR_INVALID_OPTION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No NAV Database specified ähnelt.
+        /// </summary>
+        public static string ERROR_NAV_DATABASE_MISSING {
+            get {
+                return ResourceManager.GetString("ERROR_NAV_DATABASE_MISSING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No NAV Server specified ähnelt.
+        /// </summary>
+        public static string ERROR_NAV_SERVER_MISSING {
+            get {
+                return ResourceManager.GetString("ERROR_NAV_SERVER_MISSING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Error ähnelt.
         /// </summary>
         public static string ERROR_TITLE {
@@ -214,11 +250,47 @@ namespace VisualizerUI.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No Visualizer Database specified ähnelt.
+        /// </summary>
+        public static string ERROR_VISUALIZER_DATABASE_MISSING {
+            get {
+                return ResourceManager.GetString("ERROR_VISUALIZER_DATABASE_MISSING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No Visualizer Server specified ähnelt.
+        /// </summary>
+        public static string ERROR_VISUALIZER_SERVER_MISSING {
+            get {
+                return ResourceManager.GetString("ERROR_VISUALIZER_SERVER_MISSING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die NAV Visualizer ähnelt.
         /// </summary>
         public static string MAIN_WINDOW_TITLE {
             get {
                 return ResourceManager.GetString("MAIN_WINDOW_TITLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Info ähnelt.
+        /// </summary>
+        public static string MSG_TITLE {
+            get {
+                return ResourceManager.GetString("MSG_TITLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Visualizer Database updated ähnelt.
+        /// </summary>
+        public static string MSG_UPDATE_DONE {
+            get {
+                return ResourceManager.GetString("MSG_UPDATE_DONE", resourceCulture);
             }
         }
         

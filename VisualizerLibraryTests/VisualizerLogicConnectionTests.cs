@@ -7,16 +7,18 @@ namespace VisualizerLibraryTests
     [TestClass]
     public class VisualizerLogicConnectionTests
     {
-        private static string ServerFromFile = "";
-        private static string DatabaseFromFile = "";
+        private static string _serverFromFile = "";
+        private static string _databaseFromFile = "";
         
         [ClassInitialize]
+#pragma warning disable IDE0060 // Nicht verwendete Parameter entfernen
         public static void ClassInitialize(TestContext context)
+#pragma warning restore IDE0060 // Nicht verwendete Parameter entfernen
         {
             string[] connectionFileData = File.ReadAllLines(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "/NavVisualizerTestConnectionData.txt");
 
-            ServerFromFile = connectionFileData[0];
-            DatabaseFromFile = connectionFileData[1];
+            _serverFromFile = connectionFileData[0];
+            _databaseFromFile = connectionFileData[1];
         }
 
         [TestMethod]
@@ -55,7 +57,7 @@ namespace VisualizerLibraryTests
         [TestMethod]
         public void ConnectToDatabaseWithValidDataFromDesktopFileAndConnectionNotNullAndOpen()
         {
-            SqlConnection cnn = NavDatabaseLogic.GetOpenConnectionToNavDatabase(ServerFromFile, DatabaseFromFile);
+            SqlConnection cnn = NavDatabaseLogic.GetOpenConnectionToNavDatabase(_serverFromFile, _databaseFromFile);
             cnn.Should().NotBeNull();
             cnn.State.Should().Be(System.Data.ConnectionState.Open);
             cnn.Close();
